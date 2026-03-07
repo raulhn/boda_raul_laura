@@ -1,0 +1,129 @@
+.countdown {
+  background: var(--secondary-color);
+  padding: 5rem 0;
+}
+
+.countdown-subtitle {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--text-light);
+  margin-bottom: 4rem;
+}
+
+.countdown-grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+.countdown-item {
+  text-align: center;
+  background: var(--white);
+  padding: 2rem 1.5rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px var(--shadow);
+  transition: all 0.3s ease;
+  min-width: 120px;
+}
+
+.countdown-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px var(--shadow-hover);
+}
+
+.countdown-number {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.countdown-label {
+  font-size: 1rem;
+  color: var(--text-light);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.countdown-separator {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  font-weight: 300;
+  opacity: 0.7;
+}
+
+.countdown-message {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.countdown-message p {
+  font-size: 1.3rem;
+  color: var(--text-dark);
+  font-weight: 500;
+}
+
+/* Animación para números que cambian */
+.countdown-number {
+  animation: numberPulse 0.3s ease-in-out;
+}
+
+@keyframes numberPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .countdown-grid {
+    gap: 1rem;
+  }
+
+  .countdown-item {
+    padding: 1.5rem 1rem;
+    min-width: 100px;
+  }
+
+  .countdown-number {
+    font-size: 2.5rem;
+  }
+
+  .countdown-label {
+    font-size: 0.9rem;
+  }
+
+  .countdown-separator {
+    font-size: 2rem;
+    display: none; /* Ocultar separadores en móvil para mejor diseño */
+  }
+}
+
+@media (max-width: 480px) {
+  .countdown-grid {
+    gap: 0.5rem;
+  }
+
+  .countdown-item {
+    padding: 1rem 0.8rem;
+    min-width: 80px;
+  }
+
+  .countdown-number {
+    font-size: 2rem;
+  }
+
+  .countdown-label {
+    font-size: 0.8rem;
+  }
+
+  .countdown-message p {
+    font-size: 1.1rem;
+  }
+}
