@@ -1,79 +1,230 @@
-/* Estilos para el componente Retos */
+.retos-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+  max-width: 1050px;
+  margin: 0 auto;
+  text-align: left;
+  align-items: start;
+}
 
-.section {
-  padding: 80px 20px;
-  background-color: #f7f7f7;
+.retos {
+  background:
+    radial-gradient(circle at 8% 12%, rgba(212, 175, 55, 0.13), transparent 23rem),
+    radial-gradient(circle at 94% 83%, rgba(139, 69, 19, 0.08), transparent 22rem),
+    #fcfaf5;
+}
+
+.retos .section-title {
+  margin-bottom: 0.4rem;
+}
+
+.retos .section-subtitle {
+  max-width: 35rem;
+  margin: 0 auto 3rem;
+  color: #756b59;
   text-align: center;
 }
 
-.section-title {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-  color: #2a2a2a;
-}
-
-.section-subtitle {
-  font-size: 1.2rem;
-  margin-bottom: 40px;
-  color: #555555;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 15px;
-}
-
-.retos-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
-  margin-bottom: 40px;
-}
-
 .reto-item {
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.4rem 1rem;
+  padding: clamp(1.75rem, 4vw, 2.5rem);
+  border: 1px solid rgba(197, 163, 75, 0.28);
+  border-radius: 20px;
+  background: linear-gradient(145deg, #fffefb, #f7f0e1);
+  box-shadow: 0 18px 45px rgba(75, 54, 13, 0.08);
 }
 
-.reto-item:hover {
-  transform: translateY(-5px);
+.reto-icono {
+  display: grid;
+  width: 3.25rem;
+  height: 3.25rem;
+  place-items: center;
+  grid-row: span 2;
+  border-radius: 50%;
+  background: #d4af37;
+  color: #fff;
+  font-size: 1.5rem;
+  box-shadow: 0 8px 18px rgba(181, 139, 34, 0.28);
+}
+
+.reto-etiqueta,
+.retos-paso {
+  color: #96701a;
+  font-size: 0.69rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
 }
 
 .reto-item h3 {
-  font-size: 1.8rem;
-  color: #333333;
-  margin-bottom: 10px;
+  margin-top: 0.15rem;
+  color: #352b1a;
+  font-size: 1.65rem;
 }
 
 .reto-item p {
-  font-size: 1rem;
-  color: #666666;
+  grid-column: 1 / -1;
+  margin: 1.25rem 0 0;
+  color: #625b4e;
   line-height: 1.5;
 }
 
-form {
+.reto-premio {
   display: flex;
-  flex-direction: column;
+  grid-column: 1 / -1;
   align-items: center;
-  gap: 15px;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(181, 139, 34, 0.25);
+  color: #735a19;
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
-label {
-  font-size: 1rem;
-  color: #333333;
+.reto-premio svg {
+  font-size: 1.2rem;
 }
 
-input[type="file"] {
-  margin: 10px 0;
+.retos-form {
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 18px 50px rgba(75, 54, 13, 0.12);
 }
 
-button[type="submit"] {
-  background-color: #007bff;
-  color: white;
+.retos-form-cabecera {
+  margin-bottom: 1.75rem;
+}
+
+.retos-form-cabecera h3 {
+  margin: 0.35rem 0;
+  color: #352b1a;
+  font-size: 1.5rem;
+}
+
+.retos-form-cabecera p,
+.retos-nota {
+  color: #7c7467;
+  font-size: 0.9rem;
+}
+
+.retos-campos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.retos-campo {
+  margin-bottom: 1.25rem;
+}
+
+.retos-campo > label,
+.retos-etiqueta-campo {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #514736;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.retos-form .entrada-texto {
+  display: block;
+  padding: 0 0.85rem;
+  border: 1px solid #dfd8c9;
+  border-radius: 10px;
+  background: #fffdf9;
+  color: #352b1a;
+  font: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.retos-form .entrada-texto:focus {
+  outline: none;
+  border-color: #c49a31;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+}
+
+.retos-input-con-icono {
+  position: relative;
+}
+
+.retos-input-con-icono > svg {
+  position: absolute;
+  top: 50%;
+  left: 0.8rem;
+  z-index: 1;
+  color: #9f8650;
+  transform: translateY(-50%);
+}
+
+.retos-input-con-icono .entrada-texto {
+  padding-left: 2.45rem;
+}
+
+.retos-campo-fichero {
+  margin-bottom: 1.5rem;
+}
+
+.retos-nota {
+  margin-top: 0.55rem;
+}
+
+.retos-enviar {
+  display: flex;
+  width: 100%;
+  min-height: 3.3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #c39a31, #a97d17);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.retos-enviar:hover {
+  box-shadow: 0 10px 20px rgba(142, 101, 18, 0.25);
+  transform: translateY(-2px);
+}
+
+.retos-enviar:focus-visible {
+  outline: 3px solid rgba(169, 125, 23, 0.35);
+  outline-offset: 3px;
+}
+
+@media (max-width: 768px) {
+  .retos-grid,
+  .retos-campos {
+    grid-template-columns: 1fr;
+  }
+
+  .retos .section-subtitle {
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .reto-item,
+  .retos-form {
+    padding: 1.35rem;
+    border-radius: 16px;
+  }
+
+  .reto-item h3 {
+    font-size: 1.4rem;
+  }
+
+  .entrada-fichero-zona {
+    min-height: 11.5rem;
+  }
+}
   border: none;
   padding: 10px 20px;
   border-radius: 5px;

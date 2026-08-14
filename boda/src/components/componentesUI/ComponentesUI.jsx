@@ -1,7 +1,13 @@
 import "./ComponentesUI.css";
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
-import { MdWarningAmber, MdCheckCircleOutline } from "react-icons/md";
+import {
+  MdCheckCircleOutline,
+  MdClose,
+  MdInsertDriveFile,
+  MdOutlineCloudUpload,
+  MdWarningAmber,
+} from "react-icons/md";
 
 export function EntradaTexto({
   valorDefecto = "",
@@ -10,6 +16,7 @@ export function EntradaTexto({
   width = "150px",
   height = "30px",
   placeholder = "",
+  id,
 }) {
   const [valor, setValor] = useState(valorDefecto);
 
@@ -20,6 +27,7 @@ export function EntradaTexto({
   return (
     <input
       className={"entrada-texto"}
+      id={id}
       style={{ width: width, height: height }}
       value={valor}
       onChange={(e) => {
@@ -379,7 +387,7 @@ function removeAccents(text) {
     .normalize();
 }
 
-export function DataTable({ cabeceras, datos, accion = (e) => {} }) {
+export function DataTable({ cabeceras, datos, accion = () => {} }) {
   const [filtro, setFiltro] = useState("");
   const [datosFiltrados, setDatosFiltrados] = useState(datos);
   const TAM_PAGINA = 10;
@@ -540,21 +548,79 @@ export function EntradaFichero({
   setFichero,
   aceptar = "image/*",
   width = "300px",
-  height = "40px",
+  height,
 }) {
   const [ficheroLocal, setFicheroLocal] = useState(null);
+  const [arrastrando, setArrastrando] = useState(false);
+  const idEntrada = useId();
+  const entradaRef = useRef(null);
 
   useEffect(() => {
     setFichero(ficheroLocal);
   }, [ficheroLocal, setFichero]);
 
+  function seleccionarFichero(listaFicheros) {
+    const ficheroSeleccionado = listaFicheros?.[0];
+
+    if (ficheroSeleccionado) {
+      setFicheroLocal(ficheroSeleccionado);
+    }
+  }
+
   return (
-    <input
-      type="file"
+    <div
       className="entrada-fichero"
-      accept={aceptar}
-      style={{ width: width, height: height }}
-      onChange={(e) => setFicheroLocal(e.target.files[0])}
-    />
+      style={{ maxWidth: width, minHeight: height }}
+    >
+      <input
+        id={idEntrada}
+        ref={entradaRef}
+        type="file"
+        className="entrada-fichero-input"
+        accept={aceptar}
+        onChange={(e) => seleccionarFichero(e.target.files)}
+      />
+      <label
+        className={`entrada-fichero-zona${arrastrando ? " esta-arrastrando" : ""}`}
+        htmlFor={idEntrada}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setArrastrando(true);
+        }}
+        onDragLeave={() => setArrastrando(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setArrastrando(false);
+          seleccionarFichero(e.dataTransfer.files);
+        }}
+      >
+        <MdOutlineCloudUpload className="entrada-fichero-icono" aria-hidden="true" />
+        <span className="entrada-fichero-titulo">
+          {ficheroLocal ? "Cambiar archivo" : "Sube tu foto"}
+        </span>
+        <span className="entrada-fichero-ayuda">
+          Arrastra una imagen aquí o haz clic para buscarla
+        </span>
+      </label>
+      {ficheroLocal && (
+        <div className="entrada-fichero-seleccionado">
+          <MdInsertDriveFile aria-hidden="true" />
+          <span title={ficheroLocal.name}>{ficheroLocal.name}</span>
+          <button
+            type="button"
+            className="entrada-fichero-eliminar"
+            aria-label="Quitar archivo seleccionado"
+            onClick={() => {
+              setFicheroLocal(null);
+              if (entradaRef.current) {
+                entradaRef.current.value = "";
+              }
+            }}
+          >
+            <MdClose aria-hidden="true" />
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
