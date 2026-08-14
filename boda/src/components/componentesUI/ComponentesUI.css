@@ -1,0 +1,48 @@
+/* Estilos para el componente EntradaFichero mejorado */
+.entrada-fichero {
+  display: inline-block;
+  width: 300px;
+  padding: 20px;
+  border: 2px dashed #ccc;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.3s, background-color 0.3s;
+  position: relative; /* Para el ícono */
+}
+
+.entrada-fichero:hover {
+  border-color: #007bff;
+  background-color: #e6f7ff;
+}
+
+.entrada-fichero:active {
+  border-color: #0056b3;
+  background-color: #d0ebff;
+}
+
+.entrada-fichero input[type="file"] {
+  display: none;
+}
+
+.entrada-fichero::before {
+  content: "Subir archivo"; /* Texto por defecto */
+  font-size: 16px;
+  color: #666;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.entrada-fichero::after {
+  content: "📄"; /* Icono relacionado con archivo */
+  font-size: 24px;
+  color: #007bff;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+}

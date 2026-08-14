@@ -1,0 +1,560 @@
+import "./ComponentesUI.css";
+import { useEffect, useId, useState } from "react";
+
+import { MdWarningAmber, MdCheckCircleOutline } from "react-icons/md";
+
+export function EntradaTexto({
+  valorDefecto = "",
+  secure = false,
+  setTexto,
+  width = "150px",
+  height = "30px",
+  placeholder = "",
+}) {
+  const [valor, setValor] = useState(valorDefecto);
+
+  useEffect(() => {
+    setValor(valorDefecto);
+  }, [valorDefecto]);
+
+  return (
+    <input
+      className={"entrada-texto"}
+      style={{ width: width, height: height }}
+      value={valor}
+      onChange={(e) => {
+        setValor(e.target.value);
+        setTexto(e.target.value);
+      }}
+      type={secure ? "password" : "text"}
+      placeholder={placeholder}
+    />
+  );
+}
+
+export function Boton({
+  texto = "Botón",
+  type = "button",
+  onClick = () => {},
+}) {
+  return (
+    <button className={"boton"} onClick={onClick} type={type}>
+      {texto}
+    </button>
+  );
+}
+
+export function EntradaTextoArea({
+  valorDefecto = "",
+  setTexto,
+  width = "300px",
+  height = "100px",
+}) {
+  const [valor, setValor] = useState(valorDefecto);
+
+  useEffect(() => {
+    setValor(valorDefecto);
+  }, [valorDefecto]);
+
+  return (
+    <textarea
+      className={"entrada-texto-area"}
+      style={{ width: width, height: height }}
+      value={valor}
+      onChange={(e) => {
+        setValor(e.target.value);
+        setTexto(e.target.value);
+      }}
+    />
+  );
+}
+
+export function Selector({
+  valor = "",
+  opciones = [],
+  setValor,
+  width = "150px",
+  height = "50px",
+}) {
+  return (
+    <select
+      className={"selector"}
+      style={{ width: width, height: height }}
+      value={valor}
+      onChange={(e) => setValor(e.target.value)}
+    >
+      {opciones.map((opcion) => (
+        <option key={opcion.valor} value={opcion.valor}>
+          {opcion.etiqueta}
+        </option>
+      ))}
+    </select>
+  );
+}
+
+export function DropDown({ cabecera, cuerpo, expandidoInicial = false }) {
+  const [expandido, setExpandido] = useState(expandidoInicial);
+  const idContenido = useId();
+
+  return (
+    <article className="dropdown">
+      <button
+        type="button"
+        className="dropdown-cabecera"
+        aria-expanded={expandido}
+        aria-controls={idContenido}
+        onClick={() => setExpandido((estadoActual) => !estadoActual)}
+      >
+        <div className="dropdown-cabecera-contenido">{cabecera}</div>
+        <span className="dropdown-indicador" aria-hidden="true">
+          {expandido ? "−" : "+"}
+        </span>
+      </button>
+      <div id={idContenido} className="dropdown-cuerpo" hidden={!expandido}>
+        {cuerpo}
+      </div>
+    </article>
+  );
+}
+
+export function CustomTabs({ tabs, pestana = 0 }) {
+  const [pestanaSeleccionada, setPestanaSeleccionada] = useState();
+
+  function obtenerBackGroundColor(active, index) {
+    if (active) {
+      return "#e0e0e0";
+    }
+    return index === pestanaSeleccionada ? "#007bff" : "#f5f5f5";
+  }
+
+  useEffect(() => {
+    setPestanaSeleccionada(pestana);
+  }, [pestana]);
+
+  return (
+    <div className="custom-tabs">
+      <div className="custom-tabs-bar">
+        {tabs.map((tab, index) => (
+          <button
+            key={index}
+            type="button"
+            className={`custom-tab-btn${index === pestanaSeleccionada ? " active" : ""}`}
+            style={{
+              background: obtenerBackGroundColor(false, index),
+              color: index === pestanaSeleccionada ? "#fff" : "#222",
+              padding: "7px 16px",
+              borderRadius: "5px",
+              border: "none",
+              marginRight: "5px",
+              cursor: "pointer",
+              fontWeight: 500,
+              transition: "background 0.2s, color 0.2s",
+            }}
+            onClick={() => setPestanaSeleccionada(index)}
+            onMouseDown={(e) =>
+              (e.currentTarget.style.background = obtenerBackGroundColor(
+                true,
+                index,
+              ))
+            }
+            onMouseUp={(e) =>
+              (e.currentTarget.style.background = obtenerBackGroundColor(
+                false,
+                index,
+              ))
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.background = obtenerBackGroundColor(
+                false,
+                index,
+              ))
+            }
+          >
+            {tab.nombre}
+          </button>
+        ))}
+      </div>
+      <div className="custom-tabs-content" style={{ marginTop: 12 }}>
+        {tabs.map((tab, index) =>
+          index === pestanaSeleccionada ? (
+            <div key={index} style={{ flexGrow: 1 }}>
+              {tab.contenido()}
+            </div>
+          ) : null,
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ModalAviso
+export function ModalAviso({
+  visible,
+  setVisible,
+  mensaje,
+  textBoton,
+  titulo = "",
+}) {
+  if (!visible) return null;
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <MdWarningAmber size={60} color="#f87c00" className="icono-warning" />
+        <div className="titulo">{titulo}</div>
+        <div className="mensaje">{mensaje}</div>
+        <button className="boton" onClick={() => setVisible(false)}>
+          {textBoton}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ModalConfirmacion
+export function ModalConfirmacion({
+  visible,
+  setVisible,
+  mensaje,
+  textBoton,
+  textBotonCancelar,
+  accion,
+  accionCancelar,
+}) {
+  if (!visible) return null;
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <MdWarningAmber size={60} color="#f87c00" className="icono-warning" />
+        <div className="mensaje">{mensaje}</div>
+        <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
+          <button
+            className="boton"
+            onClick={() => {
+              setVisible(false);
+              accion();
+            }}
+            style={{ background: "#007BFF", color: "#FFF" }}
+          >
+            {textBoton}
+          </button>
+          <button
+            className="boton"
+            onClick={() => {
+              accionCancelar();
+              setVisible(false);
+            }}
+            style={{ background: "red", color: "#FFF" }}
+          >
+            {textBotonCancelar}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ModalExito
+export function ModalExito({ visible, setVisible, mensaje, textBoton }) {
+  if (!visible) return null;
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <MdCheckCircleOutline
+          size={60}
+          color="#4caf50"
+          className="icono-warning"
+        />
+        <div className="mensaje">{mensaje}</div>
+        <button className="boton" onClick={() => setVisible(false)}>
+          {textBoton}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export function EnlaceDiv({ onClick, contenido }) {
+  return (
+    <div className="enlace-div" onClick={onClick}>
+      {contenido()}
+    </div>
+  );
+}
+
+export function ModalComponente({ visible, contenido, titulo = "" }) {
+  if (!visible) return null;
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        {titulo && <div className="titulo">{titulo}</div>}
+        <div className="contenido">{contenido}</div>
+      </div>
+    </div>
+  );
+}
+
+export function Paginacion({
+  array = [],
+  page_size = 10,
+  page_number = 1,
+  className = "",
+}) {
+  const [paginaActual, setPaginaActual] = useState(page_number);
+
+  useEffect(() => {
+    setPaginaActual(page_number);
+  }, [page_number]);
+
+  // Validar que array sea realmente un array
+  if (!Array.isArray(array)) {
+    console.error(
+      "Paginacion: el parámetro 'array' debe ser un array, recibido:",
+      typeof array,
+    );
+    return <div>Error: datos no válidos para paginación</div>;
+  }
+
+  const tamanoArray = array.length;
+  const totalPaginas = Math.ceil(tamanoArray / page_size);
+
+  if (array.length === 0) {
+    return <div>No hay elementos para mostrar</div>;
+  }
+
+  return (
+    <>
+      <div className={className}>
+        {array.map((item, index) => {
+          const inicio = (paginaActual - 1) * page_size;
+          const fin = inicio + page_size;
+          if (index >= inicio && index < fin) {
+            return item;
+          }
+          return null;
+        })}
+      </div>
+      <div className="paginacion">
+        <button
+          className="boton"
+          onClick={() => setPaginaActual(1)}
+          disabled={paginaActual === 1}
+        >
+          {"<<"}
+        </button>
+        <button
+          className="boton"
+          onClick={() => setPaginaActual(paginaActual - 1)}
+          disabled={paginaActual === 1}
+        >
+          {"<"}
+        </button>
+        <span>
+          Página {paginaActual} de {totalPaginas}
+        </span>
+        <button
+          className="boton"
+          onClick={() => setPaginaActual(paginaActual + 1)}
+          disabled={paginaActual === totalPaginas}
+        >
+          {">"}
+        </button>
+        <button
+          className="boton"
+          onClick={() => setPaginaActual(totalPaginas)}
+          disabled={paginaActual === totalPaginas}
+        >
+          {">>"}
+        </button>
+      </div>
+    </>
+  );
+}
+
+function removeAccents(text) {
+  return text
+    .toString()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .normalize();
+}
+
+export function DataTable({ cabeceras, datos, accion = (e) => {} }) {
+  const [filtro, setFiltro] = useState("");
+  const [datosFiltrados, setDatosFiltrados] = useState(datos);
+  const TAM_PAGINA = 10;
+  const [paginaActual, setPaginaActual] = useState(
+    Math.ceil(Math.min(1, datosFiltrados.length / TAM_PAGINA)),
+  );
+  const [seleccionado, setSeleccionado] = useState(null);
+
+  useEffect(() => {
+    setPaginaActual(Math.ceil(Math.min(1, datos.length / TAM_PAGINA)));
+  }, [datos]);
+
+  function obtiene_resultados(datos_filtrados) {
+    if (!datos_filtrados || datos_filtrados.length === 0) {
+      return <div>No hay datos para mostrar</div>;
+    } else {
+      return (
+        <>
+          <table className="data-table">
+            <thead>
+              <tr>
+                {cabeceras.map((cabecera, index) => (
+                  <th key={index} style={{ padding: "10px" }}>
+                    {cabecera}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {datos_filtrados.map((fila, indexFila) => (
+                <tr
+                  key={indexFila}
+                  style={{
+                    ...(indexFila >= TAM_PAGINA * (paginaActual - 1) &&
+                    indexFila < TAM_PAGINA * paginaActual
+                      ? {}
+                      : { display: "none" }),
+                    ...(seleccionado === indexFila
+                      ? { backgroundColor: "#d3d3d3" }
+                      : {}),
+                  }}
+                  onClick={() => {
+                    setSeleccionado(indexFila);
+                    accion(fila[0]);
+                  }}
+                >
+                  {fila.map((celda, indexCelda) => (
+                    <td
+                      key={indexCelda}
+                      style={
+                        indexCelda === 0
+                          ? { display: "none" }
+                          : { padding: "10px" }
+                      }
+                    >
+                      {celda}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      );
+    }
+  }
+
+  useEffect(() => {
+    const nuevosDatosFiltrados = datos.filter((fila) => {
+      let textoFila = fila.join(" ");
+      let filtroSinAcentos = removeAccents(filtro);
+      let textoFilaSinAcentos = removeAccents(textoFila);
+      return textoFilaSinAcentos
+        .toString()
+        .toLowerCase()
+        .includes(filtroSinAcentos.toLowerCase());
+    });
+
+    if (!nuevosDatosFiltrados || nuevosDatosFiltrados.length === 0) {
+      setDatosFiltrados([]);
+      setPaginaActual(Math.min(1, datosFiltrados.length / TAM_PAGINA));
+    } else {
+      setDatosFiltrados(nuevosDatosFiltrados);
+
+      if (paginaActual > Math.ceil(nuevosDatosFiltrados.length / TAM_PAGINA)) {
+        setPaginaActual(Math.ceil(nuevosDatosFiltrados.length / TAM_PAGINA));
+      }
+    }
+  }, [filtro, datos]);
+
+  return (
+    <>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "10px",
+        }}
+      >
+        <EntradaTexto
+          setTexto={(texto) => {
+            setFiltro(texto);
+          }}
+        />
+        <p style={{ margin: 0 }}>Total: {datosFiltrados.length}</p>
+      </div>
+      {obtiene_resultados(datosFiltrados)}
+      <div className="paginacion">
+        <button
+          className="boton"
+          onClick={() =>
+            setPaginaActual(Math.min(1, datosFiltrados.length / TAM_PAGINA))
+          }
+          disabled={Number(paginaActual) <= 1}
+        >
+          {"<<"}
+        </button>
+        <button
+          className="boton"
+          onClick={() => setPaginaActual(paginaActual - 1)}
+          disabled={Number(paginaActual) <= 1}
+        >
+          {"<"}
+        </button>
+        <span>
+          Página {paginaActual} de{" "}
+          {Math.ceil(datosFiltrados.length / TAM_PAGINA)}
+        </span>
+        <button
+          className="boton"
+          onClick={() => setPaginaActual(paginaActual + 1)}
+          disabled={
+            Number(paginaActual) >=
+            Math.ceil(datosFiltrados.length / TAM_PAGINA)
+          }
+        >
+          {">"}
+        </button>
+        <button
+          className="boton"
+          onClick={() =>
+            setPaginaActual(Math.ceil(datosFiltrados.length / TAM_PAGINA))
+          }
+          disabled={
+            Number(paginaActual) >=
+            Math.ceil(datosFiltrados.length / TAM_PAGINA)
+          }
+        >
+          {">>"}
+        </button>
+      </div>
+    </>
+  );
+}
+
+export function EntradaFichero({
+  setFichero,
+  aceptar = "image/*",
+  width = "300px",
+  height = "40px",
+}) {
+  const [ficheroLocal, setFicheroLocal] = useState(null);
+
+  useEffect(() => {
+    setFichero(ficheroLocal);
+  }, [ficheroLocal, setFichero]);
+
+  return (
+    <input
+      type="file"
+      className="entrada-fichero"
+      accept={aceptar}
+      style={{ width: width, height: height }}
+      onChange={(e) => setFicheroLocal(e.target.files[0])}
+    />
+  );
+}

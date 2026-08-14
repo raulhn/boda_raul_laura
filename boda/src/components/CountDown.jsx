@@ -1,43 +1,45 @@
-import { useState, useEffect } from 'react'
-import './CountDown.css'
+import { useState, useEffect } from "react";
+import "./CountDown.css";
 
 const CountDown = () => {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
     minutes: 0,
-    seconds: 0
-  })
+    seconds: 0,
+  });
 
   useEffect(() => {
-    const weddingDate = new Date('2026-03-07T16:00:00')
-    
+    const weddingDate = new Date("2027-10-23T12:00:00");
+
     const calculateTimeLeft = () => {
-      const now = new Date()
-      const difference = weddingDate - now
+      const now = new Date();
+      const difference = weddingDate - now;
 
       if (difference > 0) {
         setTimeLeft({
           days: Math.floor(difference / (1000 * 60 * 60 * 24)),
           hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
           minutes: Math.floor((difference / 1000 / 60) % 60),
-          seconds: Math.floor((difference / 1000) % 60)
-        })
+          seconds: Math.floor((difference / 1000) % 60),
+        });
       }
-    }
+    };
 
-    calculateTimeLeft()
-    const timer = setInterval(calculateTimeLeft, 1000)
+    calculateTimeLeft();
+    const timer = setInterval(calculateTimeLeft, 1000);
 
-    return () => clearInterval(timer)
-  }, [])
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <section className="countdown section">
       <div className="container">
         <h2 className="section-title">Cuenta Regresiva</h2>
-        <p className="countdown-subtitle">¡Faltan muy pocos días para nuestro gran día!</p>
-        
+        <p className="countdown-subtitle">
+          ¡Faltan muy pocos días para nuestro gran día!
+        </p>
+
         <div className="countdown-grid">
           <div className="countdown-item">
             <div className="countdown-number">{timeLeft.days}</div>
@@ -65,7 +67,8 @@ const CountDown = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default CountDown
+export default CountDown;
+
