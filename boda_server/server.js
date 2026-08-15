@@ -24,19 +24,8 @@ function authenticateToken(req, res, next) {
 }
 
 // Example route to generate a JWT token (for testing purposes)
-app.post("/login", (req, res) => {
-  const { username, password } = req.body;
-
-  const bLogin = servletUser.login(req, res);
-  if (!bLogin) {
-    return res
-      .status(401)
-      .json({ success: false, message: "Invalid credentials" });
-  }
-  const user = { name: username };
-  const accessToken = jwt.sign(user, SECRET_KEY);
-  res.json({ accessToken });
-});
+app.post("/login", servletUser.login);
+app.post("/registrar", servletUser.registrar);
 
 app.use((req, res, next) => {
   authenticateToken(req, res, next);

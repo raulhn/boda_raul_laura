@@ -29,7 +29,27 @@ export async function login(req, res) {
       }
     }
   } catch (error) {
-    console.error("Error during login:", error);
+    console.error("Error durante el login:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+}
+
+export async function registrar(req, res) {
+  try {
+    const { login, password } = req.body;
+    const usuarioRecuperado = await Usuario.registrar(login, password);
+    if (!usuarioRecuperado) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User registration failed" });
+    } else {
+      return res.json({
+        success: true,
+        message: "Usuario registrado correctamente",
+      });
+    }
+  } catch (error) {
+    console.error("Error durante el registro:", error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 }
