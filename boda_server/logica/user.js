@@ -19,6 +19,7 @@ export function comparar_passwords(password, password2) {
 
 export async function login(login, password) {
   try {
+    await compruebaUsuAdmin();
     const sql =
       "select * from " +
       ESQUEMA_BD +
@@ -66,5 +67,27 @@ export async function registrar(login, password) {
   } catch (error) {
     console.error("Error en la función registrar:", error);
     throw new Error("Error en la función registrar");
+  }
+}
+
+// Comprueba si existe el usuario admin, si no existe lo crea con la contraseña del .env
+export async function compruebaUsuAdmin() {
+  try {
+    const password_admin = process.env.PASSWORD_ADMIN;
+    const sql =
+      "select * from " +
+      ESQUEMA_BD +
+      ".usuario where login = " +
+      pool.escape("admin");
+    const results = await wrapperBD.consulta(sql);
+    if (results.length === 0) {
+      const hash_password = await hashPassword(password_admin);
+      await registrar("admin", hash_password);
+      return true;
+    }
+    return true;
+  } catch (error) {
+    console.error("Error en la función compruebaUsuAdmin:", error);
+    return false;
   }
 }
