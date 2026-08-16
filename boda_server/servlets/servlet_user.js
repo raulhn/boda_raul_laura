@@ -1,4 +1,5 @@
 import * as Usuario from "../logica/user.js";
+import * as constantes from "../constantes.js";
 
 export async function login(req, res) {
   try {
@@ -21,6 +22,13 @@ export async function login(req, res) {
       ) {
         const user = { name: username };
         const accessToken = jwt.sign(user, process.env.TOKENAUTH);
+
+        res.cookie(constantes.ACCESS_TOKEN, tokens.accessToken, {
+          httpOnly: true,
+          secure: true, // Asegúrate de que tu aplicación esté sirviendo a través de HTTPS
+          sameSite: "Strict", // Cambia esto según tus necesidades
+          maxAge: constantes.TIEMPO_ACCESS_TOKEN * 1000, // 24 horas
+        });
         return res.json({ accessToken });
       } else {
         return res

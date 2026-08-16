@@ -12,8 +12,7 @@ const SECRET_KEY = process.env.TOKENAUTH; // Replace with your own secret key
 
 // Middleware to verify JWT token
 function authenticateToken(req, res, next) {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
+  const token = req.cookies.access_token;
 
   if (token == null) return res.sendStatus(401); // No token provided
 
@@ -26,15 +25,13 @@ function authenticateToken(req, res, next) {
 
 // Example route to generate a JWT token (for testing purposes)
 app.post("/login", servletUser.login);
-app.post("/registrar", servletUser.registrar);
 
 app.use((req, res, next) => {
   authenticateToken(req, res, next);
 });
 
 // Start the server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8084;
 app.listen(PORT, () => {
-  console.log(process.env.TEST);
   console.log(`Server is running on port ${PORT}`);
 });
