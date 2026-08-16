@@ -1,3 +1,4 @@
+import "dotenv/config";
 import jwt from "jsonwebtoken";
 import express from "express";
 import bodyParser from "body-parser";
@@ -34,5 +35,6 @@ app.use((req, res, next) => {
 // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
+  console.log(process.env.TEST);
   console.log(`Server is running on port ${PORT}`);
 });
