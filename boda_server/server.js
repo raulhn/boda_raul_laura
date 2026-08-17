@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import express from "express";
 import bodyParser from "body-parser";
 import https from "https";
+import fs from "fs";
 
 import * as servletUser from "./servlets/servlet_user.js";
 
