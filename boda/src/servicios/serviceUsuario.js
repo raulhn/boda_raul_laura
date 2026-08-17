@@ -1,4 +1,4 @@
-import { peticionServicio } from "./peticionServicio.js";
+import { peticionServicio } from "./serviceComun.js";
 
 export async function loginUsuario(usuario, contrasena) {
   try {
