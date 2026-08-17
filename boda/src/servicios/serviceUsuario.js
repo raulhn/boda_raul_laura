@@ -1,5 +1,5 @@
 import { peticionServicio } from "./serviceComun.js";
-import { URL_API } from "../config.js";
+import { URL_API } from "../constantes.js";
 
 export async function loginUsuario(usuario, contrasena) {
   try {
