@@ -2,6 +2,7 @@ import "dotenv/config";
 import jwt from "jsonwebtoken";
 import express from "express";
 import bodyParser from "body-parser";
+import https from "https";
 
 import * as servletUser from "./servlets/servlet_user.js";
 
@@ -32,6 +33,15 @@ app.use((req, res, next) => {
 
 // Start the server
 const PORT = process.env.PORT || 8084;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+
+https
+  .createServer(
+    {
+      key: fs.readFileSync("apache/apache.key"),
+      cert: fs.readFileSync("apache/apache-certificate.crt"),
+    },
+    app,
+  )
+  .listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
