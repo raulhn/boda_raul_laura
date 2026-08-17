@@ -1,6 +1,6 @@
 import pool from "./conexion.js";
 
-function consulta(sql) {
+export function consulta(sql) {
   return new Promise((resolve, reject) => {
     try {
       pool.query(sql, (error, results) => {
@@ -23,7 +23,7 @@ function consulta(sql) {
   });
 }
 
-function actualiza(sql) {
+export function actualiza(sql) {
   return new Promise((resolve, reject) => {
     try {
       pool.getConnection((error, connection) => {
