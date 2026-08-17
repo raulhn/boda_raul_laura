@@ -1,4 +1,5 @@
 import { EntradaTexto, Boton } from "../componentesUI/ComponentesUI.jsx";
+import { loginUsuario } from "../../services/servicioLogin.js";
 
 import { useState } from "react";
 
