@@ -1,34 +1,87 @@
 import pool from "./conexion.js";
 
-export async function consulta(sql, values) {
-  try {
-    const [results] = await pool.query(sql, values);
-    return results;
-  } catch (error) {
-    console.error("Error al ejecutar consulta:", error);
-    throw error;
-  }
+function consulta(sql) {
+  return new Promise((resolve, reject) => {
+    try {
+      pool.query(sql, (error, results) => {
+        try {
+          if (error) {
+            console.log("base_datos.js -> actualiza:", error);
+            reject(error);
+          } else {
+            resolve(results);
+          }
+        } catch (error) {
+          console.log("base_datos.js -> actualiza:", error);
+          reject(error);
+        }
+      });
+    } catch (error) {
+      console.log("base_datos.js -> actualiza:", error);
+      reject(error);
+    }
+  });
 }
 
-export async function actualiza(sql, values) {
-  let connection;
-
-  try {
-    connection = await pool.getConnection();
-    await connection.beginTransaction();
-    const [results] = await connection.query(sql, values);
-    await connection.commit();
-    return results;
-  } catch (error) {
+function actualiza(sql) {
+  return new Promise((resolve, reject) => {
     try {
-      await connection.rollback();
-    } catch (rollbackError) {
-      console.error("Error al revertir transacción:", rollbackError);
+      pool.getConnection((error, connection) => {
+        try {
+          if (error) {
+            console.log("base_datos.js -> actualiza:", error);
+            connection.release();
+            reject(error);
+          } else {
+            connection.beginTransaction((error) => {
+              try {
+                if (error) {
+                  console.log("base_datos.js -> actualiza:", error);
+                  connection.release();
+                  reject(error);
+                } else {
+                  connection.query(sql, (error, results) => {
+                    try {
+                      if (error) {
+                        connection.rollback();
+                        console.log("base_datos.js -> actualiza:", error);
+                        connection.release();
+                        reject(error);
+                      } else {
+                        connection.commit((error) => {
+                          if (error) {
+                            connection.rollback();
+                            console.log("base_datos.js -> actualiza:", error);
+                            connection.release();
+                            reject(error);
+                          } else {
+                            connection.release();
+                            resolve(results);
+                          }
+                        });
+                      }
+                    } catch (error) {
+                      console.log("base_datos.js -> actualiza:", error);
+                      connection.release();
+                      reject(error);
+                    }
+                  });
+                }
+              } catch (error) {
+                console.log("base_datos.js -> actualiza:", error);
+                connection.release();
+                reject(error);
+              }
+            });
+          }
+        } catch (error) {
+          console.log("base_datos.js -> actualiza:", error);
+          reject(error);
+        }
+      });
+    } catch (error) {
+      console.log("base_datos.js -> actualiza:", error);
+      reject(error);
     }
-
-    console.error("Error al ejecutar actualización:", error);
-    throw error;
-  } finally {
-    connection?.release();
-  }
+  });
 }
