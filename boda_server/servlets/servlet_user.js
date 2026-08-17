@@ -8,11 +8,11 @@ export async function login(req, res) {
     if (!usuarioRecuperado) {
       return res
         .status(401)
-        .json({ success: false, message: "Invalid credentials" });
+        .send({ success: false, message: "Invalid credentials" });
     } else if (usuarioRecuperado.length === 0) {
       return res
         .status(401)
-        .json({ success: false, message: "Invalid credentials" });
+        .send({ success: false, message: "Invalid credentials" });
     } else {
       if (
         await Usuario.comparar_passwords(
@@ -29,16 +29,16 @@ export async function login(req, res) {
           sameSite: "Strict", // Cambia esto según tus necesidades
           maxAge: constantes.TIEMPO_ACCESS_TOKEN * 1000, // 24 horas
         });
-        return res.json({ accessToken });
+        return res.status(200).send({ success: true, token: accessToken });
       } else {
         return res
           .status(401)
-          .json({ success: false, message: "Invalid credentials" });
+          .send({ success: false, message: "Invalid credentials" });
       }
     }
   } catch (error) {
     console.error("Error durante el login:", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    res.status(500).send({ success: false, message: "Internal server error" });
   }
 }
 
@@ -49,15 +49,15 @@ export async function registrar(req, res) {
     if (!usuarioRecuperado) {
       return res
         .status(400)
-        .json({ success: false, message: "User registration failed" });
+        .send({ success: false, message: "User registration failed" });
     } else {
-      return res.json({
+      return res.status(200).send({
         success: true,
         message: "Usuario registrado correctamente",
       });
     }
   } catch (error) {
     console.error("Error durante el registro:", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    res.status(500).send({ success: false, message: "Internal server error" });
   }
 }
