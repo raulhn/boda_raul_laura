@@ -4,11 +4,13 @@ import express from "express";
 import bodyParser from "body-parser";
 import https from "https";
 import fs from "fs";
+import cookieParser from "cookie-parser";
 
 import * as servletUser from "./servlets/servlet_user.js";
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 const SECRET_KEY = process.env.TOKENAUTH; // Replace with your own secret key
 
