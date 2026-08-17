@@ -1,7 +1,8 @@
 import { EntradaTexto, Boton } from "../componentesUI/ComponentesUI.jsx";
-import { loginUsuario } from "../../services/servicioLogin.js";
+import { loginUsuario } from "../../servicios/serviceUsuario.js";
 
 import { useState } from "react";
+import "./ComponenteLogin.css";
 
 export default function ComponenteLogin() {
   const [usuario, setUsuario] = useState("");
