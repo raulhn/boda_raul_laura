@@ -4,7 +4,7 @@ import { URL_API } from "../constantes.js";
 export async function loginUsuario(usuario, contrasena) {
   try {
     const url = URL_API + "/login";
-    const body = { usuario, contrasena };
+    const body = { usuario: usuario, password: contrasena };
     const respuesta = await peticionServicio("POST", url, body);
     return respuesta;
   } catch (error) {
