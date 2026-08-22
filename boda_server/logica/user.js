@@ -4,17 +4,11 @@ import * as wrapperBD from "../bd/wrapperBD.js";
 
 import { ESQUEMA_BD, SALTROUNDS } from "../constantes.js";
 
-export function comparar_passwords(password, password2) {
-  return new Promise((resolve, reject) => {
-    bcrypt.compare(password, password2, (err, result) => {
-      if (err) {
-        console.error("Error al comparar las contraseñas:", err);
-        reject(new Error("Error al comparar las contraseñas"));
-      } else {
-        resolve(result);
-      }
-    });
-  });
+export async function comparar_passwords(password, password2) {
+  console.log("Comparar passwords", password, password2)
+  const resultado = await bcrypt.compare(password, password2)
+  console.log("Resultado", resultado)
+  return resultado
 }
 
 export async function obtenerUsuario(login) {
@@ -76,8 +70,7 @@ export async function compruebaUsuAdmin() {
       pool.escape("admin");
     const results = await wrapperBD.consulta(sql);
     if (results.length === 0) {
-      const hash_password = await hashPassword(password_admin);
-      await registrar("admin", hash_password);
+      await registrar("admin", password_admin);
       return true;
     }
     return true;

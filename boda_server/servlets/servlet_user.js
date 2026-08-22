@@ -1,5 +1,6 @@
 import * as Usuario from "../logica/user.js";
 import * as constantes from "../constantes.js";
+import jwt from "jsonwebtoken";
 
 export async function login(req, res) {
   try {
@@ -24,10 +25,10 @@ export async function login(req, res) {
           usuarioRecuperado[0].password,
         )
       ) {
-        const user = { name: username };
+        const user = { name: usuario };
         const accessToken = jwt.sign(user, process.env.TOKENAUTH);
 
-        res.cookie(constantes.ACCESS_TOKEN, tokens.accessToken, {
+        res.cookie(constantes.ACCESS_TOKEN, accessToken, {
           httpOnly: true,
           secure: true, // Asegúrate de que tu aplicación esté sirviendo a través de HTTPS
           sameSite: "Strict", // Cambia esto según tus necesidades
