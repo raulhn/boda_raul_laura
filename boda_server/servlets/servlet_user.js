@@ -3,8 +3,12 @@ import * as constantes from "../constantes.js";
 
 export async function login(req, res) {
   try {
-    const { login, password } = req.body;
-    const usuarioRecuperado = await Usuario.login(login, password);
+    const { usuario, password } = req.body;
+    const usuarioRecuperado = await Usuario.obtenerUsuario(usuario, password);
+    console.log("Body", req.body)
+    console.log("Login", usuario)
+    console.log("password", password)
+    console.log("Usuario recuperado", usuarioRecuperado)
     if (!usuarioRecuperado) {
       return res
         .status(401)

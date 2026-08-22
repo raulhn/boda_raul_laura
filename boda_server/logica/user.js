@@ -17,22 +17,17 @@ export function comparar_passwords(password, password2) {
   });
 }
 
-export async function login(login, password) {
+export async function obtenerUsuario(login) {
   try {
     await compruebaUsuAdmin();
-    const sql =
-      "select * from " +
-      ESQUEMA_BD +
-      ".usuario where login = " +
-      pool.escape(login) +
-      " and password = " +
-      pool.escape(password);
+    const sql = "select * from " + ESQUEMA_BD + ".usuario where login = " + pool.escape(login);
+    console.log("SQL", sql)
 
     const results = await wrapperBD.consulta(sql);
-    return results;
+    return results
   } catch (error) {
-    console.error("Error en la función login:", error);
-    throw new Error("Error en la función login");
+    console.error("Error en la funcion de obtenerUsuario", error)
+    throw new Error("Error en la funcion de obtenerUsuario")
   }
 }
 
