@@ -56,6 +56,7 @@ export default function ComponenteLogin() {
         mensaje={"Usuario o contraseña incorrectos"}
         mostrar={false}
         onCerrar={() => {}}
+        textoBoton={"Cerrar"}
       />
     </div>
   );
