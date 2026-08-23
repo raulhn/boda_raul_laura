@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
 import Retos from "./components/componentesRetos/Retos.jsx";
-import { BrowserRouter, Routes, Route } from "react-router";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ComponenteLogin from "./components/componenteLogin/ComponenteLogin.jsx";
 import ComponenteMesas from "./components/componenteMesas/ComponenteMesas.jsx";
 import ComponenteRetos from "./components/componenteRetos/ComponenteRetos.jsx";
