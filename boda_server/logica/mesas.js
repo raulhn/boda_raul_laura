@@ -3,7 +3,7 @@ import pool from "../bd/conexion.js";
 
 export async function obtenerMesas() {
   try {
-    const sql = "select * from mesas";
+    const sql = "select * from mesa";
     const results = await wrapperBD.consulta(sql);
     return results;
   } catch (error) {
@@ -15,7 +15,7 @@ export async function obtenerMesas() {
 export async function insertaMesa(nombreMesa, descripcion) {
   try {
     const sql =
-      "insert into mesas (nombre_mesa, deescripcion) values (" +
+      "insert into mesa (nombre_mesa, descripcion) values (" +
       pool.escape(nombreMesa) +
       ", " +
       pool.escape(descripcion) +
@@ -32,9 +32,9 @@ export async function insertaMesa(nombreMesa, descripcion) {
 export async function actualizarMesa(idMesa, nombreMesa, descripcion) {
   try {
     const sql =
-      "update mesas set nombre_mesa = " +
+      "update mesa set nombre_mesa = " +
       pool.escape(nombreMesa) +
-      ", deescripcion = " +
+      ", descripcion = " +
       pool.escape(descripcion) +
       " where id_mesa = " +
       pool.escape(idMesa);
@@ -48,7 +48,7 @@ export async function actualizarMesa(idMesa, nombreMesa, descripcion) {
 
 export async function eliminarMesa(idMesa) {
   try {
-    const sql = "delete from mesas where id_mesa = " + pool.escape(idMesa);
+    const sql = "delete from mesa where id_mesa = " + pool.escape(idMesa);
     const results = await wrapperBD.actualiza(sql);
     return results.affectedRows > 0;
   } catch (error) {

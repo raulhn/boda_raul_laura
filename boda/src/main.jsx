@@ -5,6 +5,7 @@ import App from "./App.jsx";
 import Retos from "./components/componentesRetos/Retos.jsx";
 import { BrowserRouter, Routes, Route } from "react-router";
 import ComponenteLogin from "./components/componenteLogin/ComponenteLogin.jsx";
+import ComponenteMesas from "./components/componenteMesas/ComponenteMesas.jsx";
 import { URL_BASE } from "./constantes.js";
 
 createRoot(document.getElementById("root")).render(
@@ -13,6 +14,7 @@ createRoot(document.getElementById("root")).render(
       <Routes>
         <Route path={URL_BASE + "/"} element={<App />} />
         <Route path={URL_BASE + "/login"} element={<ComponenteLogin />} />
+        <Route path={URL_BASE + "/mesas"} element={<ComponenteMesas />} />
         <Route path={URL_BASE + "/reto"} element={<Retos />} />
       </Routes>
     </BrowserRouter>

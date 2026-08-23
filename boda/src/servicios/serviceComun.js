@@ -1,36 +1,33 @@
-export function peticionServicio(metodo, url, body) {
-  return new Promise((resolve, reject) => {
-    let parametros;
-    if (metodo === "GET") {
-      {
-        parametros = {
-          method: metodo,
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-        };
-      }
-    } else {
-      parametros = {
-        method: metodo,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-        credentials: "include",
-      };
-    }
+export async function peticionServicio(metodo, url, body) {
+  const parametros = {
+    method: metodo,
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+  };
 
-    fetch(url, parametros)
-      .then((response) => {
-        response
-          .json()
-          .then((data) => {
-            resolve(data);
-          })
-          .catch((error) => {
-            reject(error);
-          });
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+  if (body !== undefined) {
+    parametros.body = JSON.stringify(body);
+  }
+
+  const response = await fetch(url, parametros);
+  const contenido = await response.text();
+  let data = null;
+
+  if (contenido) {
+    try {
+      data = JSON.parse(contenido);
+    } catch {
+      data = { message: contenido };
+    }
+  }
+
+  if (!response.ok) {
+    throw new Error(
+      data?.error ||
+        data?.message ||
+        `La petición ha fallado con el código ${response.status}`,
+    );
+  }
+
+  return data;
 }

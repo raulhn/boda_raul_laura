@@ -7,6 +7,7 @@ import fs from "fs";
 import cookieParser from "cookie-parser";
 
 import * as servletUser from "./servlets/servlet_user.js";
+import * as servletMesa from "./servlets/servlet_mesas.js";
 
 const app = express();
 app.use(bodyParser.json());
@@ -33,6 +34,11 @@ app.post("/login", servletUser.login);
 app.use((req, res, next) => {
   authenticateToken(req, res, next);
 });
+
+app.get("/obtenerMesas", servletMesa.obtenerMesas);
+app.post("/insertarMesa", servletMesa.insertarMesa);
+app.put("/actualizarMesa", servletMesa.actualizarMesa);
+app.delete("/eliminarMesa/:idMesa", servletMesa.eliminarMesa);
 
 // Start the server
 const PORT = process.env.PORT || 8084;
