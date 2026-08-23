@@ -5,6 +5,7 @@ import {
 } from "../componentesUI/ComponentesUI.jsx";
 import { loginUsuario } from "../../servicios/serviceUsuario.js";
 import { useNavigate } from "react-router-dom";
+import { URL_BASE } from "../../constantes.js";
 
 import { useState } from "react";
 import "./ComponenteLogin.css";
@@ -21,7 +22,7 @@ export default function ComponenteLogin() {
       const respuesta = await loginUsuario(usuario, contrasena);
       if (respuesta && respuesta.success) {
         console.log("Login exitoso");
-        navigate("/dashboard");
+        navigate(URL_BASE + "/dashboard");
       } else {
         console.error("Error en login:", respuesta.message);
         setMostrarModal(true);
