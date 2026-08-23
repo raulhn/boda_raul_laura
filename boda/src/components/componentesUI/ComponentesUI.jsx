@@ -43,10 +43,10 @@ export function EntradaTexto({
 export function Boton({
   texto = "Botón",
   type = "button",
-  onClick = () => {},
+  onClick = () => { },
 }) {
   return (
-    <button className={"boton"} onClick={onClick} type={type}>
+    <button className={"btn"} onClick={onClick} type={type}>
       {texto}
     </button>
   );
@@ -160,22 +160,22 @@ export function CustomTabs({ tabs, pestana = 0 }) {
             }}
             onClick={() => setPestanaSeleccionada(index)}
             onMouseDown={(e) =>
-              (e.currentTarget.style.background = obtenerBackGroundColor(
-                true,
-                index,
-              ))
+            (e.currentTarget.style.background = obtenerBackGroundColor(
+              true,
+              index,
+            ))
             }
             onMouseUp={(e) =>
-              (e.currentTarget.style.background = obtenerBackGroundColor(
-                false,
-                index,
-              ))
+            (e.currentTarget.style.background = obtenerBackGroundColor(
+              false,
+              index,
+            ))
             }
             onMouseLeave={(e) =>
-              (e.currentTarget.style.background = obtenerBackGroundColor(
-                false,
-                index,
-              ))
+            (e.currentTarget.style.background = obtenerBackGroundColor(
+              false,
+              index,
+            ))
             }
           >
             {tab.nombre}
@@ -387,7 +387,7 @@ function removeAccents(text) {
     .normalize();
 }
 
-export function DataTable({ cabeceras, datos, accion = () => {} }) {
+export function DataTable({ cabeceras, datos, accion = () => { } }) {
   const [filtro, setFiltro] = useState("");
   const [datosFiltrados, setDatosFiltrados] = useState(datos);
   const TAM_PAGINA = 10;
@@ -422,7 +422,7 @@ export function DataTable({ cabeceras, datos, accion = () => {} }) {
                   key={indexFila}
                   style={{
                     ...(indexFila >= TAM_PAGINA * (paginaActual - 1) &&
-                    indexFila < TAM_PAGINA * paginaActual
+                      indexFila < TAM_PAGINA * paginaActual
                       ? {}
                       : { display: "none" }),
                     ...(seleccionado === indexFila

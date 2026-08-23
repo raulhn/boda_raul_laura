@@ -10,6 +10,8 @@ export default function ComponenteLogin() {
 
   async function login() {
     try {
+      console.log("Usuario", usuario)
+      console.log("Password", contrasena)
       const respuesta = await loginUsuario(usuario, contrasena);
       if (respuesta && respuesta.success) {
         console.log("Login exitoso");
@@ -25,12 +27,12 @@ export default function ComponenteLogin() {
     <div className="componente-login">
       <EntradaTexto
         valor={usuario}
-        setValor={setUsuario}
+        setTexto={setUsuario}
         placeholder={"Usuario"}
       />
       <EntradaTexto
         valor={contrasena}
-        setValor={setContrasena}
+        setTexto={setContrasena}
         placeholder={"Contraseña"}
         secure={true}
       />
