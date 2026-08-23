@@ -10,8 +10,6 @@ export default function ComponenteLogin() {
 
   async function login() {
     try {
-      console.log("Usuario", usuario)
-      console.log("Password", contrasena)
       const respuesta = await loginUsuario(usuario, contrasena);
       if (respuesta && respuesta.success) {
         console.log("Login exitoso");

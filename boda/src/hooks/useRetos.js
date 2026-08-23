@@ -1,21 +1,25 @@
-const { useState, useEffect } = require("react");
+import { useState, useEffect } from "react";
 import { obtenerRetos } from "../services/s";
 
 export const useMesas = () => {
-  const [mesas, setMesas] = useState([]);
+  const [retos, setRetos] = useState([]);
   const [refrescar, setRefrescar] = useState(false);
   const [error, setError] = useState(null);
 
-  function refrescarMesas() {
+  function refrescarRetos() {
     setRefrescar(!refrescar);
   }
 
-  async function fetchMesas() {
-    try {
-      const retos = await obtenerRetos();
-    } catch (error) {
-      console.error("Error al obtener los retos:", error);
-      throw new Error("Error al obtener los retos: ", error);
-    }
-  }
+  useEffect(() => {
+    obtenerRetos()
+      .then((retos) => {
+        setRetos(retos);
+      })
+      .catch((error) => {
+        console.error("Error al obtener los retos:", error);
+        setError(error);
+      });
+  }, [refrescar]);
+
+  return { retos, refrescarRetos, error };
 };
