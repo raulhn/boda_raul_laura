@@ -53,3 +53,21 @@
 .mesas-error {
   color: #b42318;
 }
+
+.btn-eliminar {
+  background-color: #b42318;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.btn-editar {
+  background-color: #facc15;
+  color: black;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+}

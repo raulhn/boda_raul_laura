@@ -86,7 +86,7 @@ export default function ComponenteMesas() {
           required
         />
         <div className="mesas-acciones-formulario">
-          <button type="submit" disabled={guardando}>
+          <button type="submit" className="btn" disabled={guardando}>
             {guardando
               ? "Guardando..."
               : mesaEditando
@@ -94,15 +94,28 @@ export default function ComponenteMesas() {
                 : "Crear mesa"}
           </button>
           {mesaEditando && (
-            <button type="button" onClick={limpiarFormulario} disabled={guardando}>
+            <button
+              type="button"
+              className="btn"
+              onClick={limpiarFormulario}
+              disabled={guardando}
+            >
               Cancelar
             </button>
           )}
         </div>
       </form>
 
-      {mensaje && <p className="mesas-mensaje" role="status">{mensaje}</p>}
-      {error && <p className="mesas-error" role="alert">{error}</p>}
+      {mensaje && (
+        <p className="mesas-mensaje" role="status">
+          {mensaje}
+        </p>
+      )}
+      {error && (
+        <p className="mesas-error" role="alert">
+          {error}
+        </p>
+      )}
 
       {cargando ? (
         <p>Cargando mesas...</p>
@@ -123,13 +136,19 @@ export default function ComponenteMesas() {
                 <td>{mesa.nombre_mesa}</td>
                 <td>{mesa.descripcion}</td>
                 <td className="mesas-acciones">
-                  <button type="button" onClick={() => editarMesa(mesa)}>
+                  <button
+                    type="button"
+                    onClick={() => editarMesa(mesa)}
+                    className="btn-editar"
+                    disabled={guardando}
+                  >
                     Editar
                   </button>
                   <button
                     type="button"
                     onClick={() => borrarMesa(mesa.id_mesa)}
                     disabled={guardando}
+                    className="btn-eliminar"
                   >
                     Eliminar
                   </button>
