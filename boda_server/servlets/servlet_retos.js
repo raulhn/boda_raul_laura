@@ -2,8 +2,8 @@ import * as Gestor_Retos from "../logica/retos.js";
 
 export async function insertarReto(req, res) {
   try {
-    const { nombreReto, descripcion } = req.body;
-    await Gestor_Retos.insertaReto(nombreReto, descripcion);
+    const { nombreReto, descripcion, estado, icono } = req.body;
+    await Gestor_Retos.insertaReto(nombreReto, descripcion, estado, icono);
     res.status(200).json({ message: "Reto insertado correctamente" });
   } catch (error) {
     console.error("Error en la función insertarReto:", error);
@@ -28,11 +28,13 @@ export async function eliminarReto(req, res) {
 
 export async function actualizarReto(req, res) {
   try {
-    const { idReto, nombreReto, descripcion } = req.body;
+    const { idReto, nombreReto, descripcion, estado, icono } = req.body;
     const resultado = await Gestor_Retos.actualizarReto(
       idReto,
       nombreReto,
       descripcion,
+      estado,
+      icono,
     );
     if (resultado) {
       res.status(200).json({ message: "Reto actualizado correctamente" });

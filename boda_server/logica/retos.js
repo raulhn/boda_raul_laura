@@ -1,8 +1,7 @@
 import * as wrapperBD from "../bd/wrapperBD.js";
 import pool from "../bd/conexion.js";
 
-export async function obtenerRetos() {}
-{
+export async function obtenerRetos() {
   try {
     const sql = "select * from retos";
     const results = await wrapperBD.consulta(sql);
@@ -13,13 +12,17 @@ export async function obtenerRetos() {}
   }
 }
 
-export async function insertaReto(nombreReto, descripcion) {
+export async function insertaReto(nombreReto, descripcion, estado, icono) {
   try {
     const sql =
-      "insert into retos (nombre_reto, descripcion) values (" +
+      "insert into retos (nombre_reto, descripcion, estado, icono) values (" +
       pool.escape(nombreReto) +
       ", " +
       pool.escape(descripcion) +
+      ", " +
+      pool.escape(estado) +
+      ", " +
+      pool.escape(icono) +
       ")";
 
     const results = await wrapperBD.actualiza(sql);
@@ -30,13 +33,23 @@ export async function insertaReto(nombreReto, descripcion) {
   }
 }
 
-export async function actualizarReto(idReto, nombreReto, descripcion) {
+export async function actualizarReto(
+  idReto,
+  nombreReto,
+  descripcion,
+  estado,
+  icono,
+) {
   try {
     const sql =
       "update retos set nombre_reto = " +
       pool.escape(nombreReto) +
       ", descripcion = " +
       pool.escape(descripcion) +
+      ", estado = " +
+      pool.escape(estado) +
+      ", icono = " +
+      pool.escape(icono) +
       " where id_reto = " +
       pool.escape(idReto);
 
@@ -71,16 +84,5 @@ export async function obtenerRetoPorId(idReto) {
   } catch (error) {
     console.error("Error en la función obtenerRetoPorId:", error);
     throw new Error("Error en la función obtenerRetoPorId");
-  }
-}
-
-export async function obtenerRetos() {
-  try {
-    const sql = "select * from retos";
-    const results = await wrapperBD.consulta(sql);
-    return results;
-  } catch (error) {
-    console.error("Error en la función obtenerRetos:", error);
-    throw new Error("Error en la función obtenerRetos");
   }
 }

@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 
 import * as servletUser from "./servlets/servlet_user.js";
 import * as servletMesa from "./servlets/servlet_mesas.js";
+import * as servletReto from "./servlets/servlet_retos.js";
 
 const app = express();
 app.use(bodyParser.json());
@@ -39,6 +40,10 @@ app.get("/obtenerMesas", servletMesa.obtenerMesas);
 app.post("/insertarMesa", servletMesa.insertarMesa);
 app.put("/actualizarMesa", servletMesa.actualizarMesa);
 app.delete("/eliminarMesa/:idMesa", servletMesa.eliminarMesa);
+app.get("/obtenerRetos", servletReto.obtenerRetos);
+app.post("/insertarReto", servletReto.insertarReto);
+app.put("/actualizarReto", servletReto.actualizarReto);
+app.delete("/eliminarReto/:idReto", servletReto.eliminarReto);
 
 // Start the server
 const PORT = process.env.PORT || 8084;
