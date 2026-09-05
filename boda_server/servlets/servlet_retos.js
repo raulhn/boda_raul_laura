@@ -49,7 +49,12 @@ export async function actualizarReto(req, res) {
 
 export async function obtenerRetos(req, res) {
   try {
-    const retos = await Gestor_Retos.obtenerRetos();
+    // Get the mesa_id from the session for guests/token users
+    const mesaId = req.session?.mesa_id;
+
+    // Call Gestor_Retos.obtenerRetos with the required filtering ID
+    const retos = await Gestor_Retos.obtenerRetos(mesaId);
+
     res.status(200).json({ error: false, retos: retos });
   } catch (error) {
     console.error("Error en la función obtenerRetos:", error);

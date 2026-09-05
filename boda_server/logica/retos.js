@@ -1,10 +1,17 @@
 import * as wrapperBD from "../bd/wrapperBD.js";
 import pool from "../bd/conexion.js";
 
-export async function obtenerRetos() {
+export async function obtenerRetos(idMesa = null) {
   try {
-    const sql = "select * from retos";
-    const results = await wrapperBD.consulta(sql);
+    let sql = "select * from retos";
+    let params = [];
+
+    if (idMesa) {
+      sql = `select r.* from retos r join mesa_retos mr on r.id_reto = mr.id_reto where mr.id_mesa = ?`;
+      params = [idMesa];
+    }
+
+    const results = await wrapperBD.consulta(sql, params);
     return results;
   } catch (error) {
     console.error("Error en la función obtenerRetos:", error);

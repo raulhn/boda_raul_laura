@@ -9,29 +9,64 @@ import cookieParser from "cookie-parser";
 import * as servletUser from "./servlets/servlet_user.js";
 import * as servletMesa from "./servlets/servlet_mesas.js";
 import * as servletReto from "./servlets/servlet_retos.js";
+import { login as tokenLogin } from "./servlets/servlet_token_guest.js";
+
+// ...
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cookieParser());
 
 const SECRET_KEY = process.env.TOKENAUTH; // Replace with your own secret key
+const SESSION_SECRET = "SESSION_SECRET_KEY"; // Secret key for session cookies
 
 // Middleware to verify JWT token
 function authenticateToken(req, res, next) {
-  const token = req.cookies.access_token;
+  // 1. Check for existing JWT token (Admin/Registered user)
+  const accessToken = req.cookies.access_token;
+  if (accessToken) {
+    try {
+      const user = jwt.verify(accessToken, SECRET_KEY);
+      req.user = user;
+      return next();
+    } catch (err) {
+      return res.status(403).json({ error: "Invalid authentication token" });
+    }
+  }
 
-  if (token == null) return res.sendStatus(401); // No token provided
+  // 2. Check for session cookie (Guest user)
+  const sessionId = req.cookies.session_cookie;
+  if (sessionId) {
+    try {
+      const sessionData = jwt.verify(sessionId, SESSION_SECRET);
+      // For guests, we rely solely on the mesa_id for identification
+      req.session = { mesa_id: sessionData.mesa_id };
+      req.user = { role: "guest" }; // Assign a guest role
+      return next();
+    } catch (err) {
+      return res.status(401).json({ error: "Invalid guest session" });
+    }
+  }
 
-  jwt.verify(token, SECRET_KEY, (err, user) => {
-    if (err) return res.sendStatus(403); // Invalid token
-    req.user = user;
-    next();
-  });
+  return res.sendStatus(401); // No valid token or session found
 }
 
-// Example route to generate a JWT token (for testing purposes)
+// Existing login route for admins
 app.post("/login", servletUser.login);
 
+// New Token Login route for guests
+app.get("/token/login", tokenLogin);
+
+// Protected routes
+app.use((req, res, next) => {
+  authenticateToken(req, res, next);
+});
+
+import * as servletPhotos from "./servlets/servlet_photos.js";
+
+// ...
+
+// Protected routes
 app.use((req, res, next) => {
   authenticateToken(req, res, next);
 });
@@ -44,6 +79,9 @@ app.get("/obtenerRetos", servletReto.obtenerRetos);
 app.post("/insertarReto", servletReto.insertarReto);
 app.put("/actualizarReto", servletReto.actualizarReto);
 app.delete("/eliminarReto/:idReto", servletReto.eliminarReto);
+
+// Photo Upload Endpoint (Protected)
+app.post("/fotos/subir", servletPhotos.subirFoto);
 
 // Start the server
 const PORT = process.env.PORT || 8084;
