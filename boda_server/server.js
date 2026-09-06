@@ -55,30 +55,34 @@ function authenticateToken(req, res, next) {
 app.post("/login", servletUser.login);
 
 // New Token Login route for guests
-app.get("/token/login", tokenLogin);
+import { generarTokensParaMesas } from "./servlets/servlet_admin.js";
 
-// Protected routes
-app.use((req, res, next) => {
-  authenticateToken(req, res, next);
-});
+// Middleware to check for admin role
+function isAdmin(req, res, next) {
+  if (req.user && req.user.role === "admin") {
+    return next();
+  }
+  return res.status(403).json({ error: "Access denied: Admin privileges required." });
+}
+
+// New Admin Route for Token Generation
+app.post("/admin/generate-tokens", isAdmin, generarTokensParaMesas);
 
 import * as servletPhotos from "./servlets/servlet_photos.js";
 
 // ...
 
-// Protected routes
 app.use((req, res, next) => {
   authenticateToken(req, res, next);
 });
 
-app.get("/obtenerMesas", servletMesa.obtenerMesas);
-app.post("/insertarMesa", servletMesa.insertarMesa);
-app.put("/actualizarMesa", servletMesa.actualizarMesa);
-app.delete("/eliminarMesa/:idMesa", servletMesa.eliminarMesa);
-app.get("/obtenerRetos", servletReto.obtenerRetos);
-app.post("/insertarReto", servletReto.insertarReto);
-app.put("/actualizarReto", servletReto.actualizarReto);
-app.delete("/eliminarReto/:idReto", servletReto.eliminarReto);
+// Admin-only routes for Mesa and Reto
+app.post("/insertarMesa", isAdmin, servletMesa.insertarMesa);
+app.put("/actualizarMesa", isAdmin, servletMesa.actualizarMesa);
+app.delete("/eliminarMesa/:idMesa", isAdmin, servletMesa.eliminarMesa);
+app.post("/insertarReto", isAdmin, servletReto.insertarReto);
+app.put("/actualizarReto", isAdmin, servletReto.actualizarReto);
+app.delete("/eliminarReto/:idReto", isAdmin, servletReto.eliminarReto);
 
 // Photo Upload Endpoint (Protected)
 app.post("/fotos/subir", servletPhotos.subirFoto);
