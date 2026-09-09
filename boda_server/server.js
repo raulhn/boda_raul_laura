@@ -60,7 +60,9 @@ function isAdmin(req, res, next) {
   if (req.user && req.user.role === "admin") {
     return next();
   }
-  return res.status(403).json({ error: "Access denied: Admin privileges required." });
+  return res
+    .status(403)
+    .json({ error: "Access denied: Admin privileges required." });
 }
 
 import * as servletPhotos from "./servlets/servlet_photos.js";
@@ -68,8 +70,8 @@ import * as servletPhotos from "./servlets/servlet_photos.js";
 // The client sends every API request to /api_boda. Login remains public while
 // the rest of the routes share the authentication middleware.
 apiRouter.post("/login", servletUser.login);
-apiRouter.post("/sesion-invitado", tokenLogin);
-apiRouter.get("/token-login", tokenLogin);
+apiRouter.post("/sesion-invitado/:token", tokenLogin);
+apiRouter.get("/token-login/:token", tokenLogin);
 
 apiRouter.use(authenticateToken);
 
@@ -96,7 +98,11 @@ apiRouter.delete("/eliminarReto/:idReto", isAdmin, servletReto.eliminarReto);
 apiRouter.post("/asignarRetoMesa", isAdmin, servletReto.asignarRetoAMesa);
 
 // Photo Upload Endpoint (Protected)
-apiRouter.post("/fotos/subir", servletPhotos.procesarSubida, servletPhotos.subirFoto);
+apiRouter.post(
+  "/fotos/subir",
+  servletPhotos.procesarSubida,
+  servletPhotos.subirFoto,
+);
 
 app.use("/static/photos", express.static(servletPhotos.PHOTO_DIR));
 app.use("/api_boda", apiRouter);

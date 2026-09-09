@@ -2,7 +2,7 @@ import { consulta } from "../bd/wrapperBD.js";
 import jwt from "jsonwebtoken";
 
 export async function login(req, res) {
-  const token = req.body?.token ?? req.query.token;
+  const token = req.params.token;
   if (typeof token !== "string" || token.trim().length === 0) {
     return res.status(400).json({ error: "El token de mesa es obligatorio." });
   }
@@ -31,9 +31,13 @@ export async function login(req, res) {
       return res.status(200).json({ success: true, idMesa });
     }
 
-    return res.status(401).json({ error: "Token de mesa inválido o inactivo." });
+    return res
+      .status(401)
+      .json({ error: "Token de mesa inválido o inactivo." });
   } catch (error) {
     console.error("Token login error:", error);
-    return res.status(500).json({ error: "No se ha podido iniciar la sesión." });
+    return res
+      .status(500)
+      .json({ error: "No se ha podido iniciar la sesión." });
   }
 }
