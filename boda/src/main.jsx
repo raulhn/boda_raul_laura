@@ -9,6 +9,8 @@ import ComponenteMesas from "./components/componenteMesas/ComponenteMesas.jsx";
 import ComponenteRetos from "./components/componenteRetos/ComponenteRetos.jsx";
 import ComponenteDashBoard from "./components/componenteDashBoard/ComponenteDashBoard.jsx";
 import ComponenteTokensMesa from "./components/componenteTokensMesa/ComponenteTokensMesa.jsx";
+import ComponenteRetosMesas from "./components/componenteRetosMesas/ComponenteRetosMesas.jsx";
+import ComponenteLoginToken from "./components/componenteLoginToken/ComponenteLoginToken.jsx";
 
 import { URL_BASE } from "./constantes.js";
 
@@ -28,6 +30,14 @@ createRoot(document.getElementById("root")).render(
         <Route
           path={URL_BASE + "/dashboard"}
           element={<ComponenteDashBoard />}
+        />
+        <Route
+          path={URL_BASE + "/retos-mesas"}
+          element={<ComponenteRetosMesas />}
+        />
+        <Route
+          path={URL_BASE + "/login-token"}
+          element={<ComponenteLoginToken />}
         />
       </Routes>
     </BrowserRouter>
