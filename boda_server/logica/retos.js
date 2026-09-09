@@ -120,7 +120,7 @@ export async function asignarRetoAMesa(idMesa, idReto, estado = "activo") {
 export async function asignarRetosMesas() {
   try {
     const MAX_RETOS = 4;
-    const mesas = await wrapperBD.consulta("SELECT id_mesa FROM mesas");
+    const mesas = await wrapperBD.consulta("SELECT id_mesa FROM mesa");
     const retos = await wrapperBD.consulta("SELECT id_reto FROM retos");
 
     for (const mesa of mesas) {
