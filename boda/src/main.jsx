@@ -8,6 +8,7 @@ import ComponenteLogin from "./components/componenteLogin/ComponenteLogin.jsx";
 import ComponenteMesas from "./components/componenteMesas/ComponenteMesas.jsx";
 import ComponenteRetos from "./components/componenteRetos/ComponenteRetos.jsx";
 import ComponenteDashBoard from "./components/componenteDashBoard/ComponenteDashBoard.jsx";
+import ComponenteTokensMesa from "./components/componenteTokensMesa/ComponenteTokensMesa.jsx";
 
 import { URL_BASE } from "./constantes.js";
 
@@ -19,6 +20,10 @@ createRoot(document.getElementById("root")).render(
         <Route path={URL_BASE + "/login"} element={<ComponenteLogin />} />
         <Route path={URL_BASE + "/mesas"} element={<ComponenteMesas />} />
         <Route path={URL_BASE + "/retos"} element={<ComponenteRetos />} />
+        <Route
+          path={URL_BASE + "/tokens-mesa"}
+          element={<ComponenteTokensMesa />}
+        />
         <Route path={URL_BASE + "/reto"} element={<Retos />} />
         <Route
           path={URL_BASE + "/dashboard"}

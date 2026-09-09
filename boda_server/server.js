@@ -53,7 +53,7 @@ function authenticateToken(req, res, next) {
 }
 
 // New Token Login route for guests
-import { generarTokensParaMesas } from "./servlets/servlet_admin.js";
+import * as servletAdmin from "./servlets/servlet_admin.js";
 
 // Middleware to check for admin role
 function isAdmin(req, res, next) {
@@ -74,7 +74,17 @@ apiRouter.get("/token-login", tokenLogin);
 apiRouter.use(authenticateToken);
 
 // Admin-only routes for mesas and retos.
-apiRouter.post("/admin/generate-tokens", isAdmin, generarTokensParaMesas);
+apiRouter.post(
+  "/admin/generate-tokens",
+  isAdmin,
+  servletAdmin.generarTokensParaMesas,
+);
+apiRouter.get("/admin/tokens-mesa", isAdmin, servletAdmin.obtenerTokensMesas);
+apiRouter.post(
+  "/admin/mesas/:idMesa/token",
+  isAdmin,
+  servletAdmin.generarTokenMesa,
+);
 apiRouter.get("/obtenerMesas", isAdmin, servletMesa.obtenerMesas);
 apiRouter.post("/insertarMesa", isAdmin, servletMesa.insertarMesa);
 apiRouter.put("/actualizarMesa", isAdmin, servletMesa.actualizarMesa);
