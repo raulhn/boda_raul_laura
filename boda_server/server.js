@@ -96,6 +96,7 @@ apiRouter.post("/insertarReto", isAdmin, servletReto.insertarReto);
 apiRouter.put("/actualizarReto", isAdmin, servletReto.actualizarReto);
 apiRouter.delete("/eliminarReto/:idReto", isAdmin, servletReto.eliminarReto);
 apiRouter.post("/asignarRetoMesa", isAdmin, servletReto.asignarRetoAMesa);
+apiRouter.post("/asignarRetosMesas", isAdmin, servletReto.asignarRetosMesas);
 
 // Photo Upload Endpoint (Protected)
 apiRouter.post(

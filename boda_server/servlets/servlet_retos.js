@@ -75,6 +75,20 @@ export async function asignarRetoAMesa(req, res) {
     return res.status(201).json({ message: "Reto asignado correctamente." });
   } catch (error) {
     console.error("Error en la función asignarRetoAMesa:", error);
-    return res.status(500).json({ error: "Error al asignar el reto a la mesa." });
+    return res
+      .status(500)
+      .json({ error: "Error al asignar el reto a la mesa." });
+  }
+}
+
+export async function asignarRetosMesas(req, res) {
+  try {
+    await Gestor_Retos.asignarRetosMesas();
+    return res.status(201).json({ message: "Retos asignados correctamente." });
+  } catch (error) {
+    console.error("Error en la función asignarRetosMesas:", error);
+    return res
+      .status(500)
+      .json({ error: "Error al asignar los retos a las mesas." });
   }
 }

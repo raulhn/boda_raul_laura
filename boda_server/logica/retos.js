@@ -116,3 +116,21 @@ export async function asignarRetoAMesa(idMesa, idReto, estado = "activo") {
     throw new Error("Error en la función asignarRetoAMesa");
   }
 }
+
+export async function asignarRetosMesas() {
+  try {
+    const MAX_RETOS = 4;
+    const mesas = await wrapperBD.consulta("SELECT id_mesa FROM mesas");
+    const retos = await wrapperBD.consulta("SELECT id_reto FROM retos");
+
+    for (const mesa of mesas) {
+      for (let i = 0; i <= MAX_RETOS; i++) {
+        let reto = retos[Math.floor(Math.random() * retos.length)];
+        await asignarRetoAMesa(mesa.id_mesa, reto.id_reto, "activo");
+      }
+    }
+  } catch (error) {
+    console.error("Error en la función asignarRetosAMesa:", error);
+    throw new Error("Error en la función asignarRetosAMesa");
+  }
+}
