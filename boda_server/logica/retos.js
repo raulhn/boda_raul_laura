@@ -24,6 +24,22 @@ export async function obtenerRetos(idMesa = null) {
   }
 }
 
+export async function obtenerRetosMesa(idMesa) {
+  try {
+    const sql = `
+      select r.*
+      from retos r
+      join mesa_retos mr on r.id_reto = mr.id_reto
+      where mr.id_mesa = ? and mr.estado = 'activo'
+    `;
+    const results = await wrapperBD.consulta(sql, [idMesa]);
+    return results;
+  } catch (error) {
+    console.error("Error en la función obtenerRetosMesa:", error);
+    throw new Error("Error en la función obtenerRetosMesa");
+  }
+}
+
 export async function insertaReto(nombreReto, descripcion, estado, icono) {
   try {
     const sql =

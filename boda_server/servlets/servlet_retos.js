@@ -62,6 +62,25 @@ export async function obtenerRetos(req, res) {
   }
 }
 
+export async function obtenerRetosMesa(req, res) {
+  try {
+    const mesaID = req.session?.mesa_id;
+    if (!mesaID) {
+      return res
+        .status(400)
+        .json({ error: "El ID de la mesa es obligatorio." });
+    }
+
+    const retos = await Gestor_Retos.obtenerRetosMesa(mesaID);
+    return res.status(200).json({ error: false, retos: retos });
+  } catch (error) {
+    console.error("Error en la función obtenerRetosMesa:", error);
+    return res
+      .status(500)
+      .json({ error: "Error al obtener los retos de la mesa." });
+  }
+}
+
 export async function asignarRetoAMesa(req, res) {
   try {
     const { idMesa, idReto, estado } = req.body;
