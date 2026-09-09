@@ -107,7 +107,7 @@ export function obtenerTokenUsuario(token) {
             mesa_id: decoded.mesa_id,
           };
 
-          resolve({ usuario: usuario });
+          resolve(usuario);
         } catch (error) {
           console.error("Error al obtener el usuario:", error);
           reject("Error al obtener el usuario");
