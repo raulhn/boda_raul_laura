@@ -1,4 +1,5 @@
 import * as Gestor_Retos from "../logica/retos.js";
+import { obtenerTokenUsuario } from "../servlets/servlet_user.js";
 
 export async function insertarReto(req, res) {
   try {
