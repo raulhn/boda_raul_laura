@@ -4,6 +4,7 @@ import {
   eliminarReto as eliminarRetoServicio,
   insertarReto as insertarRetoServicio,
   obtenerRetos,
+  obtenerRetosMesa,
 } from "../servicios/serviceRetos.js";
 
 export const useRetos = () => {
@@ -80,5 +81,37 @@ export const useRetos = () => {
     insertarReto,
     actualizarReto,
     eliminarReto,
+  };
+};
+
+export const useRetosMesa = () => {
+  const [retosMesa, setRetosMesa] = useState([]);
+  const [error, setError] = useState(null);
+  const [cargando, setCargando] = useState(true);
+
+  const refrescarRetosMesa = useCallback(async () => {
+    setCargando(true);
+    setError(null);
+
+    try {
+      const retosRecuperados = await obtenerRetosMesa();
+      setRetosMesa(retosRecuperados);
+    } catch (error) {
+      console.error("Error al obtener los retos:", error);
+      setError(error.message);
+    } finally {
+      setCargando(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    refrescarRetosMesa();
+  }, [refrescarRetosMesa]);
+
+  return {
+    retosMesa,
+    cargando,
+    error,
+    refrescarRetosMesa,
   };
 };

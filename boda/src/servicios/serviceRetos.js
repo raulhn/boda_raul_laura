@@ -12,6 +12,17 @@ export async function obtenerRetos() {
   }
 }
 
+export async function obtenerRetosMesa() {
+  try {
+    const url = `${URL_API}/obtenerRetosMesa`;
+    const respuesta = await peticionServicio("GET", url);
+    return respuesta.retos;
+  } catch (error) {
+    console.error("Error en obtenerRetosMesa:", error);
+    throw new Error("Error en obtenerRetosMesa: " + error.message);
+  }
+}
+
 export async function insertarReto(nombreReto, descripcion, estado, icono) {
   try {
     return await peticionServicio("POST", `${URL_API}/insertarReto`, {
@@ -47,7 +58,10 @@ export async function actualizarReto(
 
 export async function eliminarReto(idReto) {
   try {
-    return await peticionServicio("DELETE", `${URL_API}/eliminarReto/${idReto}`);
+    return await peticionServicio(
+      "DELETE",
+      `${URL_API}/eliminarReto/${idReto}`,
+    );
   } catch (error) {
     throw new Error("Error en eliminarReto: " + error.message);
   }
