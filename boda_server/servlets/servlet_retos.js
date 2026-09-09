@@ -61,3 +61,20 @@ export async function obtenerRetos(req, res) {
     res.status(500).json({ error: "Error al obtener los retos" });
   }
 }
+
+export async function asignarRetoAMesa(req, res) {
+  try {
+    const { idMesa, idReto, estado } = req.body;
+    if (!idMesa || !idReto) {
+      return res
+        .status(400)
+        .json({ error: "La mesa y el reto son obligatorios." });
+    }
+
+    await Gestor_Retos.asignarRetoAMesa(idMesa, idReto, estado);
+    return res.status(201).json({ message: "Reto asignado correctamente." });
+  } catch (error) {
+    console.error("Error en la función asignarRetoAMesa:", error);
+    return res.status(500).json({ error: "Error al asignar el reto a la mesa." });
+  }
+}

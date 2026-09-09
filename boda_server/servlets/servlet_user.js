@@ -31,8 +31,11 @@ export async function login(req, res) {
         )
       ) {
         console.log("Login successful for user:", usuario);
-        const user = { name: usuario };
-        // Logging the attempt to use TOKENAUTH
+        const user = {
+          name: usuario,
+          role: usuario === "admin" ? "admin" : "user",
+        };
+
         console.log("Attempting to sign token for user:", usuario);
         const accessToken = jwt.sign(user, process.env.TOKENAUTH);
 

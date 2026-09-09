@@ -1,9 +1,9 @@
 import pool from "./conexion.js";
 
-export function consulta(sql) {
+export function consulta(sql, params = []) {
   return new Promise((resolve, reject) => {
     try {
-      pool.query(sql, (error, results) => {
+      pool.query(sql, params, (error, results) => {
         try {
           if (error) {
             console.log("base_datos.js -> actualiza:", error);
@@ -23,7 +23,7 @@ export function consulta(sql) {
   });
 }
 
-export function actualiza(sql) {
+export function actualiza(sql, params = []) {
   return new Promise((resolve, reject) => {
     try {
       pool.getConnection((error, connection) => {
@@ -40,7 +40,7 @@ export function actualiza(sql) {
                   connection.release();
                   reject(error);
                 } else {
-                  connection.query(sql, (error, results) => {
+                  connection.query(sql, params, (error, results) => {
                     try {
                       if (error) {
                         connection.rollback();

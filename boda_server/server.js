@@ -14,6 +14,7 @@ import { login as tokenLogin } from "./servlets/servlet_token_guest.js";
 // ...
 
 const app = express();
+const apiRouter = express.Router();
 app.use(bodyParser.json());
 app.use(cookieParser());
 
@@ -51,9 +52,6 @@ function authenticateToken(req, res, next) {
   return res.sendStatus(401); // No valid token or session found
 }
 
-// Existing login route for admins
-app.post("/login", servletUser.login);
-
 // New Token Login route for guests
 import { generarTokensParaMesas } from "./servlets/servlet_admin.js";
 
@@ -65,27 +63,34 @@ function isAdmin(req, res, next) {
   return res.status(403).json({ error: "Access denied: Admin privileges required." });
 }
 
-// New Admin Route for Token Generation
-app.post("/admin/generate-tokens", isAdmin, generarTokensParaMesas);
-
 import * as servletPhotos from "./servlets/servlet_photos.js";
 
-// ...
+// The client sends every API request to /api_boda. Login remains public while
+// the rest of the routes share the authentication middleware.
+apiRouter.post("/login", servletUser.login);
+apiRouter.post("/sesion-invitado", tokenLogin);
+apiRouter.get("/token-login", tokenLogin);
 
-app.use((req, res, next) => {
-  authenticateToken(req, res, next);
-});
+apiRouter.use(authenticateToken);
 
-// Admin-only routes for Mesa and Reto
-app.post("/insertarMesa", isAdmin, servletMesa.insertarMesa);
-app.put("/actualizarMesa", isAdmin, servletMesa.actualizarMesa);
-app.delete("/eliminarMesa/:idMesa", isAdmin, servletMesa.eliminarMesa);
-app.post("/insertarReto", isAdmin, servletReto.insertarReto);
-app.put("/actualizarReto", isAdmin, servletReto.actualizarReto);
-app.delete("/eliminarReto/:idReto", isAdmin, servletReto.eliminarReto);
+// Admin-only routes for mesas and retos.
+apiRouter.post("/admin/generate-tokens", isAdmin, generarTokensParaMesas);
+apiRouter.get("/obtenerMesas", isAdmin, servletMesa.obtenerMesas);
+apiRouter.post("/insertarMesa", isAdmin, servletMesa.insertarMesa);
+apiRouter.put("/actualizarMesa", isAdmin, servletMesa.actualizarMesa);
+apiRouter.delete("/eliminarMesa/:idMesa", isAdmin, servletMesa.eliminarMesa);
+apiRouter.get("/obtenerRetos", servletReto.obtenerRetos);
+apiRouter.post("/insertarReto", isAdmin, servletReto.insertarReto);
+apiRouter.put("/actualizarReto", isAdmin, servletReto.actualizarReto);
+apiRouter.delete("/eliminarReto/:idReto", isAdmin, servletReto.eliminarReto);
+apiRouter.post("/asignarRetoMesa", isAdmin, servletReto.asignarRetoAMesa);
 
 // Photo Upload Endpoint (Protected)
-app.post("/fotos/subir", servletPhotos.subirFoto);
+apiRouter.post("/fotos/subir", servletPhotos.procesarSubida, servletPhotos.subirFoto);
+
+app.use("/static/photos", express.static(servletPhotos.PHOTO_DIR));
+app.use("/api_boda", apiRouter);
+app.use("/", apiRouter);
 
 // Start the server
 const PORT = process.env.PORT || 8084;

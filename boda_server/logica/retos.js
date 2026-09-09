@@ -7,7 +7,12 @@ export async function obtenerRetos(idMesa = null) {
     let params = [];
 
     if (idMesa) {
-      sql = `select r.* from retos r join mesa_retos mr on r.id_reto = mr.id_reto where mr.id_mesa = ?`;
+      sql = `
+        select r.*
+        from retos r
+        join mesa_retos mr on r.id_reto = mr.id_reto
+        where mr.id_mesa = ? and mr.estado = 'activo'
+      `;
       params = [idMesa];
     }
 
@@ -91,5 +96,23 @@ export async function obtenerRetoPorId(idReto) {
   } catch (error) {
     console.error("Error en la función obtenerRetoPorId:", error);
     throw new Error("Error en la función obtenerRetoPorId");
+  }
+}
+
+export async function asignarRetoAMesa(idMesa, idReto, estado = "activo") {
+  try {
+    const resultado = await wrapperBD.actualiza(
+      "UPDATE mesa_retos SET estado = ? WHERE id_mesa = ? AND id_reto = ?",
+      [estado, idMesa, idReto],
+    );
+    if (resultado.affectedRows === 0) {
+      await wrapperBD.actualiza(
+        "INSERT INTO mesa_retos (id_mesa, id_reto, estado) VALUES (?, ?, ?)",
+        [idMesa, idReto, estado],
+      );
+    }
+  } catch (error) {
+    console.error("Error en la función asignarRetoAMesa:", error);
+    throw new Error("Error en la función asignarRetoAMesa");
   }
 }
