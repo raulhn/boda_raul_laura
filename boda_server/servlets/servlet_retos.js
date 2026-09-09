@@ -50,10 +50,11 @@ export async function actualizarReto(req, res) {
 export async function obtenerRetos(req, res) {
   try {
     // Get the mesa_id from the session for guests/token users
-    const mesaId = req.session?.mesa_id;
-
+    const token = req.cookies.session_cookie;
+    const usuario = await obtenerTokenUsuario(token);
+    const mesaID = usuario.mesa_id;
     // Call Gestor_Retos.obtenerRetos with the required filtering ID
-    const retos = await Gestor_Retos.obtenerRetos(mesaId);
+    const retos = await Gestor_Retos.obtenerRetos(mesaID);
 
     res.status(200).json({ error: false, retos: retos });
   } catch (error) {
@@ -64,7 +65,9 @@ export async function obtenerRetos(req, res) {
 
 export async function obtenerRetosMesa(req, res) {
   try {
-    const mesaID = req.session?.mesa_id;
+    const token = req.cookies.session_cookie;
+    const usuario = await obtenerTokenUsuario(token);
+    const mesaID = usuario.mesa_id;
     if (!mesaID) {
       return res
         .status(400)

@@ -5,13 +5,18 @@ import jwt from "jsonwebtoken";
 export async function login(req, res) {
   try {
     console.log("Login attempt received.");
-    console.log("Body", req.body)
+    console.log("Body", req.body);
     console.log("Attempting login for user:", req.body.usuario);
 
     const { usuario, password } = req.body;
     console.log("--- START LOGIN PROCESS ---");
     const usuarioRecuperado = await Usuario.obtenerUsuario(usuario, password);
-    console.log("User found in DB:", usuarioRecuperado, "Length:", usuarioRecuperado.length);
+    console.log(
+      "User found in DB:",
+      usuarioRecuperado,
+      "Length:",
+      usuarioRecuperado.length,
+    );
 
     if (!usuarioRecuperado) {
       console.log("Login failed: User not found.");
@@ -55,7 +60,12 @@ export async function login(req, res) {
       }
     }
   } catch (error) {
-    console.error("!!! CRITICAL ERROR DURING LOGIN !!!", error.message, "Stack:", error.stack);
+    console.error(
+      "!!! CRITICAL ERROR DURING LOGIN !!!",
+      error.message,
+      "Stack:",
+      error.stack,
+    );
     res.status(500).send({ success: false, message: "Internal server error" });
   }
 }
@@ -78,4 +88,31 @@ export async function registrar(req, res) {
     console.error("Error durante el registro:", error);
     res.status(500).send({ success: false, message: "Internal server error" });
   }
+}
+
+export function obtenerTokenUsuario(token) {
+  return new Promise((resolve, reject) => {
+    jwt.verify(
+      token,
+      process.env.SESSION_SECRET || process.env.TOKENAUTH,
+      async (err, decoded) => {
+        try {
+          if (err) {
+            console.error("Error al verificar el token:", err);
+            reject("No autenticado");
+            return;
+          }
+          console.log("Decodificado", decoded);
+          const usuario = {
+            mesa_id: decoded.mesa_id,
+          };
+
+          resolve({ usuario: usuario });
+        } catch (error) {
+          console.error("Error al obtener el usuario:", error);
+          reject("Error al obtener el usuario");
+        }
+      },
+    );
+  });
 }
