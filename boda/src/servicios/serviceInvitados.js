@@ -2,7 +2,10 @@ import { URL_API } from "../constantes.js";
 import { peticionServicio } from "./serviceComun.js";
 
 export async function iniciarSesionInvitado(token) {
-  return peticionServicio("POST", `${URL_API}/sesion-invitado`, { token });
+  return peticionServicio(
+    "POST",
+    `${URL_API}/sesion-invitado/${encodeURIComponent(token)}`,
+  );
 }
 
 export async function obtenerRetosInvitado() {

@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import { actualiza, consulta } from "../bd/wrapperBD.js";
 import * as Gestor_Mesa from "../logica/mesas.js";
+import * as Gestor_Retos from "../logica/retos.js";
 
 async function guardarTokenMesa(idMesa) {
   const token = crypto.randomBytes(32).toString("hex");
@@ -22,9 +23,12 @@ async function guardarTokenMesa(idMesa) {
 export async function generarTokensParaMesas(req, res) {
   try {
     const mesas = await Gestor_Mesa.obtenerMesas();
-    const tokens = await Promise.all(
-      mesas.map(({ id_mesa: idMesa }) => guardarTokenMesa(idMesa)),
-    );
+    const tokens = [];
+
+    for (const { id_mesa: idMesa } of mesas) {
+      await Gestor_Retos.asignarRetosMesa(idMesa);
+      tokens.push(await guardarTokenMesa(idMesa));
+    }
 
     return res.status(200).json({ tokens });
   } catch (error) {
@@ -64,6 +68,7 @@ export async function generarTokenMesa(req, res) {
       return res.status(404).json({ error: "Mesa no encontrada." });
     }
 
+    await Gestor_Retos.asignarRetosMesa(idMesa);
     return res.status(200).json(await guardarTokenMesa(idMesa));
   } catch (error) {
     console.error("Error al generar el token de la mesa:", error);

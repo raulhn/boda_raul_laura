@@ -66,3 +66,13 @@ export async function eliminarReto(idReto) {
     throw new Error("Error en eliminarReto: " + error.message);
   }
 }
+
+export async function asignarRetosAutomaticamente() {
+  try {
+    return await peticionServicio("POST", `${URL_API}/asignarRetosMesas`);
+  } catch (error) {
+    throw new Error(
+      "Error al asignar los retos automáticamente: " + error.message,
+    );
+  }
+}

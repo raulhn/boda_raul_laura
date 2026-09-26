@@ -21,3 +21,44 @@
   color: #735a19;
   font-weight: 700;
 }
+
+.dashboard-asignacion-retos {
+  max-width: 34rem;
+  margin-top: 2rem;
+  padding: 1.25rem;
+  border: 1px solid #dfd8c9;
+  border-radius: 10px;
+  background: #fffdf9;
+  text-align: center;
+}
+
+.dashboard-asignacion-retos h2 {
+  margin-top: 0;
+  color: #352b1a;
+}
+
+.dashboard-boton-asignar {
+  padding: 0.75rem 1rem;
+  border: 0;
+  border-radius: 8px;
+  background: #a97d17;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+}
+
+.dashboard-boton-asignar:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.dashboard-exito {
+  color: #3d6c3d;
+  font-weight: 600;
+}
+
+.dashboard-error {
+  color: #a02c2c;
+  font-weight: 600;
+}

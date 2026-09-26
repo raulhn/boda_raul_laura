@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { MdCameraAlt, MdCardGiftcard, MdSend } from "react-icons/md";
-import { EntradaFichero, EntradaTexto } from "../componentesUI/ComponentesUI.jsx";
+import { EntradaTexto } from "../componentesUI/ComponentesUI.jsx";
 import {
   iniciarSesionInvitado,
   obtenerRetosInvitado,
@@ -11,8 +11,8 @@ import "./Retos.css";
 export default function Retos() {
   const [token, setToken] = useState("");
   const [retos, setRetos] = useState([]);
-  const [retoId, setRetoId] = useState("");
-  const [fichero, setFichero] = useState(null);
+  const [ficheros, setFicheros] = useState({});
+  const [retoEnSubida, setRetoEnSubida] = useState(null);
   const [cargando, setCargando] = useState(false);
   const [mensaje, setMensaje] = useState("");
   const [error, setError] = useState("");
@@ -27,10 +27,9 @@ export default function Retos() {
       await iniciarSesionInvitado(token);
       const retosAsignados = await obtenerRetosInvitado();
       setRetos(retosAsignados);
-      setRetoId(retosAsignados[0]?.id_reto ?? "");
       setMensaje(
         retosAsignados.length > 0
-          ? "Sesión iniciada. Elige un reto y sube tu foto."
+          ? "Sesión iniciada. Completa los retos y sube una foto para cada uno."
           : "Esta mesa no tiene retos fotográficos activos.",
       );
     } catch (error) {
@@ -40,24 +39,38 @@ export default function Retos() {
     }
   }
 
-  async function enviarFoto(event) {
+  function seleccionarFichero(retoId, fichero) {
+    setFicheros((ficherosActuales) => ({
+      ...ficherosActuales,
+      [retoId]: fichero,
+    }));
+  }
+
+  async function enviarFoto(event, retoId) {
     event.preventDefault();
-    if (!retoId || !fichero) {
-      setError("Selecciona un reto y una foto.");
+    const fichero = ficheros[retoId];
+
+    if (!fichero) {
+      setError("Selecciona una foto para este reto.");
       return;
     }
 
-    setCargando(true);
+    setRetoEnSubida(retoId);
     setError("");
     setMensaje("");
 
     try {
       await subirFotoReto(retoId, fichero);
-      setMensaje("Foto enviada correctamente. Gracias por participar.");
+      setRetos(await obtenerRetosInvitado());
+      setFicheros((ficherosActuales) => ({
+        ...ficherosActuales,
+        [retoId]: null,
+      }));
+      setMensaje("Foto guardada correctamente.");
     } catch (error) {
       setError(error.message);
     } finally {
-      setCargando(false);
+      setRetoEnSubida(null);
     }
   }
 
@@ -112,47 +125,61 @@ export default function Retos() {
             </form>
 
             {retos.length > 0 && (
-              <form className="retos-form retos-form-subida" onSubmit={enviarFoto}>
+              <section className="retos-form retos-form-subida">
                 <div className="retos-form-cabecera">
                   <span className="retos-paso">PASO 2</span>
-                  <h3>Completa un reto</h3>
+                  <h3>Completa tus retos</h3>
                 </div>
-                <div className="retos-campo">
-                  <label htmlFor="reto">Reto fotográfico</label>
-                  <select
-                    id="reto"
-                    value={retoId}
-                    onChange={(event) => setRetoId(event.target.value)}
-                  >
-                    {retos.map((reto) => (
-                      <option key={reto.id_reto} value={reto.id_reto}>
-                        {reto.nombre_reto}
-                      </option>
-                    ))}
-                  </select>
-                  {retos.find((reto) => String(reto.id_reto) === String(retoId))
-                    ?.descripcion && (
-                    <p className="retos-nota">
-                      {
-                        retos.find(
-                          (reto) => String(reto.id_reto) === String(retoId),
-                        ).descripcion
-                      }
-                    </p>
-                  )}
+                <div className="retos-lista">
+                  {retos.map((reto) => (
+                    <article className="reto-subida" key={reto.id_reto}>
+                      <h4>{reto.nombre_reto}</h4>
+                      <p>{reto.descripcion}</p>
+                      {reto.ruta_foto && (
+                        <img
+                          className="reto-foto"
+                          src={`/static/photos/${reto.ruta_foto}`}
+                          alt={`Foto enviada para ${reto.nombre_reto}`}
+                        />
+                      )}
+                      <form onSubmit={(event) => enviarFoto(event, reto.id_reto)}>
+                        <label
+                          className="reto-fichero"
+                          htmlFor={`foto-reto-${reto.id_reto}`}
+                        >
+                          <span>Selecciona una foto</span>
+                          <input
+                            id={`foto-reto-${reto.id_reto}`}
+                            type="file"
+                            accept="image/jpeg,image/png,image/webp,image/heic,image/heif"
+                            onChange={(event) =>
+                              seleccionarFichero(
+                                reto.id_reto,
+                                event.target.files?.[0] ?? null,
+                              )
+                            }
+                          />
+                          {ficheros[reto.id_reto] && (
+                            <small>{ficheros[reto.id_reto].name}</small>
+                          )}
+                        </label>
+                        <button
+                          className="retos-enviar"
+                          type="submit"
+                          disabled={retoEnSubida === reto.id_reto}
+                        >
+                          {retoEnSubida === reto.id_reto
+                            ? "Guardando..."
+                            : reto.ruta_foto
+                              ? "Sustituir mi foto"
+                              : "Subir mi foto"}
+                          <MdSend aria-hidden="true" />
+                        </button>
+                      </form>
+                    </article>
+                  ))}
                 </div>
-                <div className="retos-campo retos-campo-fichero">
-                  <span className="retos-etiqueta-campo">Tu foto</span>
-                  <EntradaFichero setFichero={setFichero} width="100%" />
-                  <p className="retos-nota">
-                    Formatos admitidos: JPG, PNG, WEBP, HEIC o HEIF. Máximo 10 MB.
-                  </p>
-                </div>
-                <button className="retos-enviar" type="submit" disabled={cargando}>
-                  Enviar mi participación
-                  <MdSend aria-hidden="true" />
-                </button>
-              </form>
+              </section>
             )}
 
             {mensaje && <p className="retos-estado" role="status">{mensaje}</p>}

@@ -99,6 +99,58 @@
   margin-top: 1.5rem;
 }
 
+.retos-lista {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.reto-subida {
+  padding: 1.25rem;
+  border: 1px solid #dfd8c9;
+  border-radius: 12px;
+  background: #fffdf9;
+}
+
+.reto-subida h4 {
+  margin: 0;
+  color: #352b1a;
+  font-size: 1.1rem;
+}
+
+.reto-subida > p {
+  margin: 0.5rem 0 1rem;
+  color: #625b4e;
+}
+
+.reto-foto {
+  display: block;
+  width: 100%;
+  max-height: 16rem;
+  margin: 0 0 1rem;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.reto-fichero {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  color: #514736;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.reto-fichero input {
+  color: #625b4e;
+  font: inherit;
+  font-weight: 400;
+}
+
+.reto-fichero small {
+  color: #7c7467;
+  font-weight: 400;
+}
+
 .retos-form select {
   width: 100%;
   min-height: 48px;

@@ -1,6 +1,8 @@
 import * as wrapperBD from "../bd/wrapperBD.js";
 import pool from "../bd/conexion.js";
 
+export const RETOS_POR_MESA = 5;
+
 export async function obtenerRetos(idMesa = null) {
   try {
     let sql = "select * from retos";
@@ -8,9 +10,11 @@ export async function obtenerRetos(idMesa = null) {
 
     if (idMesa) {
       sql = `
-        select r.*
+        select r.*, fr.ruta_foto
         from retos r
         join mesa_retos mr on r.id_reto = mr.id_reto
+        left join foto_retos fr
+          on fr.id_mesa = mr.id_mesa and fr.id_reto = mr.id_reto
         where mr.id_mesa = ? and mr.estado = 'activo'
       `;
       params = [idMesa];
@@ -27,9 +31,11 @@ export async function obtenerRetos(idMesa = null) {
 export async function obtenerRetosMesa(idMesa) {
   try {
     const sql = `
-      select r.*
+      select r.*, fr.ruta_foto
       from retos r
       join mesa_retos mr on r.id_reto = mr.id_reto
+      left join foto_retos fr
+        on fr.id_mesa = mr.id_mesa and fr.id_reto = mr.id_reto
       where mr.id_mesa = ? and mr.estado = 'activo'
     `;
     const results = await wrapperBD.consulta(sql, [idMesa]);
@@ -135,18 +141,44 @@ export async function asignarRetoAMesa(idMesa, idReto, estado = "activo") {
 
 export async function asignarRetosMesas() {
   try {
-    const MAX_RETOS = 4;
     const mesas = await wrapperBD.consulta("SELECT id_mesa FROM mesa");
-    const retos = await wrapperBD.consulta("SELECT id_reto FROM retos");
 
     for (const mesa of mesas) {
-      for (let i = 0; i <= MAX_RETOS; i++) {
-        let reto = retos[Math.floor(Math.random() * retos.length)];
-        await asignarRetoAMesa(mesa.id_mesa, reto.id_reto, "activo");
-      }
+      await asignarRetosMesa(mesa.id_mesa);
     }
   } catch (error) {
     console.error("Error en la función asignarRetosAMesa:", error);
     throw new Error("Error en la función asignarRetosAMesa");
+  }
+}
+
+export async function asignarRetosMesa(idMesa) {
+  try {
+    const retos = await wrapperBD.consulta(
+      `SELECT id_reto
+       FROM retos
+       WHERE estado = 'activo'
+       ORDER BY RAND()
+       LIMIT ?`,
+      [RETOS_POR_MESA],
+    );
+
+    if (retos.length < RETOS_POR_MESA) {
+      throw new Error(
+        `Se necesitan al menos ${RETOS_POR_MESA} retos activos para cada mesa.`,
+      );
+    }
+
+    await wrapperBD.actualiza(
+      "UPDATE mesa_retos SET estado = 'inactivo' WHERE id_mesa = ?",
+      [idMesa],
+    );
+
+    for (const reto of retos) {
+      await asignarRetoAMesa(idMesa, reto.id_reto, "activo");
+    }
+  } catch (error) {
+    console.error("Error en la función asignarRetosMesa:", error);
+    throw error;
   }
 }

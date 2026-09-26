@@ -1,5 +1,6 @@
 import { consulta } from "../bd/wrapperBD.js";
 import jwt from "jsonwebtoken";
+import { RETOS_POR_MESA, asignarRetosMesa } from "../logica/retos.js";
 
 export async function login(req, res) {
   const token = req.params.token;
@@ -15,6 +16,17 @@ export async function login(req, res) {
 
     if (results && results.length > 0) {
       const idMesa = results[0].id_mesa;
+      const retosAsignados = await consulta(
+        `SELECT COUNT(*) AS total
+         FROM mesa_retos
+         WHERE id_mesa = ? AND estado = 'activo'`,
+        [idMesa],
+      );
+
+      if (retosAsignados[0].total < RETOS_POR_MESA) {
+        await asignarRetosMesa(idMesa);
+      }
+
       const sessionData = { mesa_id: idMesa };
       const sessionToken = jwt.sign(
         sessionData,

@@ -85,23 +85,34 @@ export async function subirFoto(req, res) {
       return res.status(403).json({ error: "El reto no está asignado a esta mesa." });
     }
 
-    await actualiza(
-      "INSERT INTO foto_retos (id_mesa, id_reto, ruta_foto) VALUES (?, ?, ?)",
-      [mesaId, retoId, req.file.filename],
+    const fotosExistentes = await consulta(
+      "SELECT ruta_foto FROM foto_retos WHERE id_mesa = ? AND id_reto = ?",
+      [mesaId, retoId],
     );
+    const fotoAnterior = fotosExistentes[0]?.ruta_foto;
 
-    return res.status(201).json({
+    if (fotoAnterior) {
+      await actualiza(
+        `UPDATE foto_retos
+         SET ruta_foto = ?, fecha_subida = CURRENT_TIMESTAMP
+         WHERE id_mesa = ? AND id_reto = ?`,
+        [req.file.filename, mesaId, retoId],
+      );
+      await eliminarFichero(fotoAnterior);
+    } else {
+      await actualiza(
+        "INSERT INTO foto_retos (id_mesa, id_reto, ruta_foto) VALUES (?, ?, ?)",
+        [mesaId, retoId, req.file.filename],
+      );
+    }
+
+    return res.status(fotoAnterior ? 200 : 201).json({
       success: true,
       url: `/static/photos/${req.file.filename}`,
+      sustituida: Boolean(fotoAnterior),
     });
   } catch (error) {
     await eliminarFichero(req.file.filename);
-    if (error.code === "ER_DUP_ENTRY") {
-      return res
-        .status(409)
-        .json({ error: "Esta mesa ya ha subido una foto para el reto." });
-    }
-
     console.error("Error al registrar la foto:", error);
     return res.status(500).json({ error: "No se ha podido registrar la foto." });
   }
