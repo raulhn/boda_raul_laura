@@ -23,6 +23,18 @@ export async function obtenerRetosMesa() {
   }
 }
 
+export async function obtenerRetosAsignadosMesas() {
+  try {
+    const respuesta = await peticionServicio("GET", `${URL_API}/admin/retos-mesas`);
+    return respuesta.asignaciones;
+  } catch (error) {
+    console.error("Error en obtenerRetosAsignadosMesas:", error);
+    throw new Error(
+      "Error en obtenerRetosAsignadosMesas: " + error.message,
+    );
+  }
+}
+
 export async function insertarReto(nombreReto, descripcion, estado, icono) {
   try {
     return await peticionServicio("POST", `${URL_API}/insertarReto`, {

@@ -25,8 +25,8 @@ export async function generarTokensParaMesas(req, res) {
     const mesas = await Gestor_Mesa.obtenerMesas();
     const tokens = [];
 
+    await Gestor_Retos.asignarRetosMesas();
     for (const { id_mesa: idMesa } of mesas) {
-      await Gestor_Retos.asignarRetosMesa(idMesa);
       tokens.push(await guardarTokenMesa(idMesa));
     }
 

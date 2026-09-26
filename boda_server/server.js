@@ -93,6 +93,11 @@ apiRouter.put("/actualizarMesa", isAdmin, servletMesa.actualizarMesa);
 apiRouter.delete("/eliminarMesa/:idMesa", isAdmin, servletMesa.eliminarMesa);
 apiRouter.get("/obtenerRetos", servletReto.obtenerRetos);
 apiRouter.get("/obtenerRetosMesa", servletReto.obtenerRetosMesa);
+apiRouter.get(
+  "/admin/retos-mesas",
+  isAdmin,
+  servletReto.obtenerRetosAsignadosMesas,
+);
 apiRouter.post("/insertarReto", isAdmin, servletReto.insertarReto);
 apiRouter.put("/actualizarReto", isAdmin, servletReto.actualizarReto);
 apiRouter.delete("/eliminarReto/:idReto", isAdmin, servletReto.eliminarReto);

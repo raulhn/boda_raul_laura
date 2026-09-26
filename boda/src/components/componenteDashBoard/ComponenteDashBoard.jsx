@@ -11,7 +11,7 @@ export default function ComponenteDashBoard() {
 
   async function asignarRetos() {
     const confirmar = window.confirm(
-      "Se asignarán cinco retos aleatorios a cada mesa. Las asignaciones activas actuales se sustituirán. ¿Quieres continuar?",
+      "Se asignarán cinco retos de categorías equilibradas a cada mesa. Las asignaciones activas actuales se sustituirán. ¿Quieres continuar?",
     );
     if (!confirmar) {
       return;
@@ -24,7 +24,7 @@ export default function ComponenteDashBoard() {
     try {
       await asignarRetosAutomaticamente();
       setMensaje(
-        "Se han asignado cinco retos distintos a cada mesa correctamente.",
+        "Se han asignado cinco retos de categorías equilibradas a cada mesa correctamente.",
       );
     } catch (error) {
       setError(error.message);
@@ -40,12 +40,16 @@ export default function ComponenteDashBoard() {
       <nav className="dashboard-navegacion" aria-label="Administración">
         <Link to={`${URL_BASE}/mesas`}>Gestionar mesas</Link>
         <Link to={`${URL_BASE}/retos`}>Gestionar retos</Link>
+        <Link to={`${URL_BASE}/retos-mesas`}>
+          Consultar retos por mesa
+        </Link>
         <Link to={`${URL_BASE}/tokens-mesa`}>Gestionar tokens de mesa</Link>
       </nav>
       <section className="dashboard-asignacion-retos">
         <h2>Asignación automática de retos</h2>
         <p>
-          Distribuye cinco retos activos y distintos a cada mesa de invitados.
+          Distribuye cinco retos activos de categorías distintas por mesa y
+          equilibra las categorías entre todas ellas.
         </p>
         <button
           type="button"

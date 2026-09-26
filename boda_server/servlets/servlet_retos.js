@@ -85,6 +85,18 @@ export async function obtenerRetosMesa(req, res) {
   }
 }
 
+export async function obtenerRetosAsignadosMesas(req, res) {
+  try {
+    const asignaciones = await Gestor_Retos.obtenerRetosAsignadosMesas();
+    return res.status(200).json({ asignaciones });
+  } catch (error) {
+    console.error("Error al obtener los retos asignados a las mesas:", error);
+    return res
+      .status(500)
+      .json({ error: "Error al obtener los retos asignados a las mesas." });
+  }
+}
+
 export async function asignarRetoAMesa(req, res) {
   try {
     const { idMesa, idReto, estado } = req.body;
