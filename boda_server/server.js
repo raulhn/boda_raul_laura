@@ -19,34 +19,43 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 const SECRET_KEY = process.env.TOKENAUTH; // Replace with your own secret key
-const SESSION_SECRET = "SESSION_SECRET_KEY"; // Secret key for session cookies
+const SESSION_SECRET = process.env.SESSION_SECRET || SECRET_KEY;
 
 // Middleware to verify JWT token
 function authenticateToken(req, res, next) {
-  // 1. Check for existing JWT token (Admin/Registered user)
+  let administradorAutenticado = false;
+
+  // Check for an existing JWT token (admin/registered user).
   const accessToken = req.cookies.access_token;
   if (accessToken) {
     try {
       const user = jwt.verify(accessToken, SECRET_KEY);
       req.user = user;
-      return next();
+      administradorAutenticado = true;
     } catch (err) {
       return res.status(403).json({ error: "Invalid authentication token" });
     }
   }
 
-  // 2. Check for session cookie (Guest user)
+  // Also load the mesa session when both cookies exist. This allows an
+  // administrator to test a mesa's photo upload in the same browser session.
   const sessionId = req.cookies.session_cookie;
   if (sessionId) {
     try {
       const sessionData = jwt.verify(sessionId, SESSION_SECRET);
-      // For guests, we rely solely on the mesa_id for identification
       req.session = { mesa_id: sessionData.mesa_id };
-      req.user = { role: "guest" }; // Assign a guest role
-      return next();
+      if (!administradorAutenticado) {
+        req.user = { role: "guest" };
+      }
     } catch (err) {
-      return res.status(401).json({ error: "Invalid guest session" });
+      if (!administradorAutenticado) {
+        return res.status(401).json({ error: "Invalid guest session" });
+      }
     }
+  }
+
+  if (req.user) {
+    return next();
   }
 
   return res.sendStatus(401); // No valid token or session found
