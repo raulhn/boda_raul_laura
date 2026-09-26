@@ -39,6 +39,7 @@ createRoot(document.getElementById("root")).render(
           path={URL_BASE + "/login-token"}
           element={<ComponenteLoginToken />}
         />
+        <Route path={URL_BASE + "/token-login/:token"} element={<Retos />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,

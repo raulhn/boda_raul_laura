@@ -142,13 +142,22 @@ export async function asignarRetoAMesa(idMesa, idReto, estado = "activo") {
 export async function asignarRetosMesas() {
   try {
     const mesas = await wrapperBD.consulta("SELECT id_mesa FROM mesa");
+    const retosActivos = await wrapperBD.consulta(
+      "SELECT COUNT(*) AS total FROM retos WHERE estado = 'activo'",
+    );
+
+    if (retosActivos[0].total < RETOS_POR_MESA) {
+      throw new Error(
+        `Se necesitan al menos ${RETOS_POR_MESA} retos activos para cada mesa.`,
+      );
+    }
 
     for (const mesa of mesas) {
       await asignarRetosMesa(mesa.id_mesa);
     }
   } catch (error) {
     console.error("Error en la función asignarRetosAMesa:", error);
-    throw new Error("Error en la función asignarRetosAMesa");
+    throw error;
   }
 }
 

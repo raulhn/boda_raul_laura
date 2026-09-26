@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdCameraAlt, MdCardGiftcard, MdSend } from "react-icons/md";
 import { EntradaTexto } from "../componentesUI/ComponentesUI.jsx";
+import { useParams } from "react-router-dom";
 import {
   iniciarSesionInvitado,
   obtenerRetosInvitado,
@@ -9,6 +10,7 @@ import {
 import "./Retos.css";
 
 export default function Retos() {
+  const { token: tokenRuta } = useParams();
   const [token, setToken] = useState("");
   const [retos, setRetos] = useState([]);
   const [ficheros, setFicheros] = useState({});
@@ -16,6 +18,31 @@ export default function Retos() {
   const [cargando, setCargando] = useState(false);
   const [mensaje, setMensaje] = useState("");
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!tokenRuta) {
+      return;
+    }
+
+    async function iniciarSesionDesdeEnlace() {
+      setCargando(true);
+      setError("");
+      setMensaje("");
+
+      try {
+        await iniciarSesionInvitado(tokenRuta);
+        const retosAsignados = await obtenerRetosInvitado();
+        setRetos(retosAsignados);
+        setMensaje("Sesión iniciada. Completa los retos y sube una foto para cada uno.");
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setCargando(false);
+      }
+    }
+
+    iniciarSesionDesdeEnlace();
+  }, [tokenRuta]);
 
   async function iniciarSesion(event) {
     event.preventDefault();

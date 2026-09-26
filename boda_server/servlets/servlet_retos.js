@@ -110,6 +110,9 @@ export async function asignarRetosMesas(req, res) {
     return res.status(201).json({ message: "Retos asignados correctamente." });
   } catch (error) {
     console.error("Error en la función asignarRetosMesas:", error);
+    if (error.message.startsWith("Se necesitan al menos")) {
+      return res.status(400).json({ error: error.message });
+    }
     return res
       .status(500)
       .json({ error: "Error al asignar los retos a las mesas." });
