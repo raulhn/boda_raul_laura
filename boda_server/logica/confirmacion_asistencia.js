@@ -6,11 +6,12 @@ export async function insertar_confirmacion_asistencia(
   correo_electronico,
   telefono,
   asistencia,
+  num_asistentes,
   mensaje,
 ) {
   try {
     const sql =
-      "insert into confirmacion_asistencia (nombre_completo, correo_electronico, telefono, asistencia, mensaje) values (" +
+      "insert into confirmacion_asistencia (nombre_completo, correo_electronico, telefono, asistencia, num_asistentes, mensaje) values (" +
       pool.escape(nombre_completo) +
       ", " +
       pool.escape(correo_electronico) +
@@ -18,6 +19,8 @@ export async function insertar_confirmacion_asistencia(
       pool.escape(telefono) +
       ", " +
       pool.escape(asistencia) +
+      ", " +
+      pool.escape(num_asistentes) +
       ", " +
       pool.escape(mensaje) +
       ")";

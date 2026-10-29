@@ -6,6 +6,7 @@ export async function confirmarAsistencia(
   correo_electronico,
   telefono,
   asistencia,
+  num_asistentes,
   mensaje,
 ) {
   try {
@@ -15,6 +16,7 @@ export async function confirmarAsistencia(
       correo_electronico,
       telefono,
       asistencia,
+      num_asistentes,
       mensaje,
     };
     const respuesta = await peticionServicio("POST", url, body);

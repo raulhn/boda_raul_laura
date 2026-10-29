@@ -29,6 +29,7 @@ const RSVP = () => {
       formData.email,
       formData.phone,
       formData.attendance,
+      formData.guests,
       formData.message,
     );
     setIsSubmitting(true);
@@ -239,4 +240,3 @@ const RSVP = () => {
 };
 
 export default RSVP;
-

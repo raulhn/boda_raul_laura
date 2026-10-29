@@ -9,7 +9,7 @@ const EventDetails = () => {
       title: "Ceremonia Religiosa",
       time: "12:00",
       location: "Parroquía Virgen del Rosario de Torre Pacheco",
-      address: "Calle Principal 123, Centro Histórico",
+      address: "Plaza de la Iglesia, 1",
       description:
         "Acompáñanos en este momento sagrado donde uniremos nuestras vidas ante Dios.",
       dress_code:
@@ -20,7 +20,7 @@ const EventDetails = () => {
       title: "Celebración",
       time: "14:00",
       location: "Finca Jurosa",
-      address: "Avenida de los Rosales 456, Jardines del Norte",
+      address: "Camino de Chacón",
       description:
         "Continuemos la celebración con cena, baile y mucha diversión hasta altas horas.",
       dress_code: "Elegante casual - ¡Zapatos cómodos para bailar!",
@@ -129,4 +129,3 @@ const EventDetails = () => {
 };
 
 export default EventDetails;
-
