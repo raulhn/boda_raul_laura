@@ -79,7 +79,7 @@ import * as servletPhotos from "./servlets/servlet_photos.js";
 
 apiRouter.post(
   "/confirmar-asistencia",
-  servlerConfirmacionAsistencia.confirmarAsistencia,
+  servlerConfirmacionAsistencia.insertarConfirmacionAsistencia,
 );
 apiRouter.get(
   "/obtener-confirmaciones-asistencia",

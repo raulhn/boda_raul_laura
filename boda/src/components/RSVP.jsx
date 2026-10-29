@@ -1,50 +1,58 @@
-import { useState } from 'react'
-import './RSVP.css'
+import { useState } from "react";
+import "./RSVP.css";
+import { confirmarAsistencia } from "../servicios/serviceConfirmacionAsistencia.js";
 
 const RSVP = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    attendance: '',
-    guests: '1',
-    dietary: '',
-    message: ''
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
+    name: "",
+    email: "",
+    phone: "",
+    attendance: "",
+    guests: "1",
+    dietary: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
-    })
-  }
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    
+    e.preventDefault();
+    confirmarAsistencia(
+      formData.name,
+      formData.email,
+      formData.phone,
+      formData.attendance,
+      formData.message,
+    );
+    setIsSubmitting(true);
+
     // Simular envío del formulario
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
-    setIsSubmitting(false)
-    setIsSubmitted(true)
-    
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    setIsSubmitting(false);
+    setIsSubmitted(true);
+
     // Reset form after 5 seconds
     setTimeout(() => {
-      setIsSubmitted(false)
+      setIsSubmitted(false);
       setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        attendance: '',
-        guests: '1',
-        dietary: '',
-        message: ''
-      })
-    }, 5000)
-  }
+        name: "",
+        email: "",
+        phone: "",
+        attendance: "",
+        guests: "1",
+        dietary: "",
+        message: "",
+      });
+    }, 5000);
+  };
 
   if (isSubmitted) {
     return (
@@ -53,11 +61,13 @@ const RSVP = () => {
           <div className="success-message">
             <div className="success-icon">💕</div>
             <h3>¡Gracias por confirmar!</h3>
-            <p>Hemos recibido tu respuesta. ¡Esperamos verte en nuestro gran día!</p>
+            <p>
+              Hemos recibido tu respuesta. ¡Esperamos verte en nuestro gran día!
+            </p>
           </div>
         </div>
       </section>
-    )
+    );
   }
 
   return (
@@ -142,7 +152,7 @@ const RSVP = () => {
                     type="radio"
                     name="attendance"
                     value="si"
-                    checked={formData.attendance === 'si'}
+                    checked={formData.attendance === "si"}
                     onChange={handleChange}
                     required
                   />
@@ -153,7 +163,7 @@ const RSVP = () => {
                     type="radio"
                     name="attendance"
                     value="no"
-                    checked={formData.attendance === 'no'}
+                    checked={formData.attendance === "no"}
                     onChange={handleChange}
                     required
                   />
@@ -162,10 +172,12 @@ const RSVP = () => {
               </div>
             </div>
 
-            {formData.attendance === 'si' && (
+            {formData.attendance === "si" && (
               <>
                 <div className="form-group">
-                  <label htmlFor="guests">Número de acompañantes (incluyéndote)</label>
+                  <label htmlFor="guests">
+                    Número de acompañantes (incluyéndote)
+                  </label>
                   <select
                     id="guests"
                     name="guests"
@@ -205,8 +217,8 @@ const RSVP = () => {
               />
             </div>
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="btn submit-btn"
               disabled={isSubmitting}
             >
@@ -216,14 +228,15 @@ const RSVP = () => {
                   Enviando...
                 </>
               ) : (
-                'Confirmar Asistencia'
+                "Confirmar Asistencia"
               )}
             </button>
           </form>
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default RSVP
+export default RSVP;
+
