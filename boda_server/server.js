@@ -10,6 +10,7 @@ import * as servletUser from "./servlets/servlet_user.js";
 import * as servletMesa from "./servlets/servlet_mesas.js";
 import * as servletReto from "./servlets/servlet_retos.js";
 import { login as tokenLogin } from "./servlets/servlet_token_guest.js";
+import * as servlerConfirmacionAsistencia from "./servlets/servlet_confirmacion_asistencia.js";
 
 // ...
 
@@ -75,6 +76,16 @@ function isAdmin(req, res, next) {
 }
 
 import * as servletPhotos from "./servlets/servlet_photos.js";
+
+apiRouter.post(
+  "/confirmar-asistencia",
+  servlerConfirmacionAsistencia.confirmarAsistencia,
+);
+apiRouter.get(
+  "/obtener-confirmaciones-asistencia",
+  isAdmin,
+  servlerConfirmacionAsistencia.obtenerConfirmacionesAsistencia,
+);
 
 // The client sends every API request to /api_boda. Login remains public while
 // the rest of the routes share the authentication middleware.
