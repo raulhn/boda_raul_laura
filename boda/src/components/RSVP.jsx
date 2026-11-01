@@ -116,6 +116,7 @@ const RSVP = () => {
                 onChange={handleChange}
                 required
                 placeholder="Tu nombre completo"
+                maxLength="100"
               />
             </div>
 
@@ -130,6 +131,7 @@ const RSVP = () => {
                   onChange={handleChange}
                   required
                   placeholder="tu@email.com"
+                  maxLength="100"
                 />
               </div>
 
@@ -142,6 +144,7 @@ const RSVP = () => {
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="+52 123 456 7890"
+                  maxLength="20"
                 />
               </div>
             </div>
@@ -202,6 +205,7 @@ const RSVP = () => {
                     value={formData.dietary}
                     onChange={handleChange}
                     placeholder="Vegetariano, vegano, alergias, etc."
+                    maxLength="500"
                   />
                 </div>
               </>
@@ -216,6 +220,7 @@ const RSVP = () => {
                 onChange={handleChange}
                 placeholder="Comparte tus mejores deseos o algún mensaje especial para nosotros..."
                 rows="4"
+                maxLength="500"
               />
             </div>
 
