@@ -1,4 +1,4 @@
-import * as confirmacionAsistenciaService from "../services/confirmacion_asistencia_service.js";
+import * as confirmacionAsistencia from "../logica/confirmacion_asistencia.js";
 
 export async function insertarConfirmacionAsistencia(req, res) {
   try {
@@ -11,7 +11,7 @@ export async function insertarConfirmacionAsistencia(req, res) {
       restricciones_alimentarias,
       mensaje,
     } = req.body;
-    await confirmacionAsistenciaService.insertarConfirmacionAsistencia(
+    await confirmacionAsistencia.insertar_confirmacion_asistencia(
       nombre_completo,
       correo_electronico,
       telefono,
@@ -34,7 +34,7 @@ export async function insertarConfirmacionAsistencia(req, res) {
 export async function obtenerConfirmacionesAsistencia(req, res) {
   try {
     const confirmaciones =
-      await confirmacionAsistenciaService.obtenerConfirmacionesAsistencia();
+      await confirmacionAsistencia.obtener_confirmaciones_asistencia();
     res.status(200).json({ error: false, confirmaciones: confirmaciones });
   } catch (error) {
     console.error(
