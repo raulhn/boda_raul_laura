@@ -50,12 +50,7 @@ export async function actualizarReto(req, res) {
 
 export async function obtenerRetos(req, res) {
   try {
-    // Get the mesa_id from the session for guests/token users
-    const token = req.cookies.session_cookie;
-    const usuario = await obtenerTokenUsuario(token);
-    const mesaID = usuario.mesa_id;
-    // Call Gestor_Retos.obtenerRetos with the required filtering ID
-    const retos = await Gestor_Retos.obtenerRetos(mesaID);
+    const retos = await Gestor_Retos.obtenerRetos();
 
     res.status(200).json({ error: false, retos: retos });
   } catch (error) {

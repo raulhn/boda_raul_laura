@@ -28,7 +28,10 @@ export function obtenerCategoriaReto(nombreReto) {
     ?.nombre;
 }
 
-function seleccionarRetosEquilibrados(retosPorCategoria, asignacionesPorCategoria) {
+function seleccionarRetosEquilibrados(
+  retosPorCategoria,
+  asignacionesPorCategoria,
+) {
   const categoriasSeleccionables = [...retosPorCategoria.keys()];
   if (categoriasSeleccionables.length < RETOS_POR_MESA) {
     throw new Error(
@@ -86,7 +89,7 @@ async function guardarAsignacionRetos(idMesa, retos) {
   }
 }
 
-export async function obtenerRetos(idMesa = null) {
+export async function obtenerRetos() {
   try {
     let sql = "select * from retos";
     let params = [];
@@ -98,9 +101,8 @@ export async function obtenerRetos(idMesa = null) {
         join mesa_retos mr on r.id_reto = mr.id_reto
         left join foto_retos fr
           on fr.id_mesa = mr.id_mesa and fr.id_reto = mr.id_reto
-        where mr.id_mesa = ? and mr.estado = 'activo'
+        where  mr.estado = 'activo'
       `;
-      params = [idMesa];
     }
 
     const results = await wrapperBD.consulta(sql, params);
