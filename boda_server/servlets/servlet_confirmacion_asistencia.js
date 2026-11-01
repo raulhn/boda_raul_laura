@@ -8,6 +8,7 @@ export async function insertarConfirmacionAsistencia(req, res) {
       telefono,
       asistencia,
       num_asistentes,
+      restricciones_alimentarias,
       mensaje,
     } = req.body;
     await confirmacionAsistenciaService.insertarConfirmacionAsistencia(
@@ -16,6 +17,7 @@ export async function insertarConfirmacionAsistencia(req, res) {
       telefono,
       asistencia,
       num_asistentes,
+      restricciones_alimentarias,
       mensaje,
     );
     res

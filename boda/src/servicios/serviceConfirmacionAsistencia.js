@@ -7,6 +7,7 @@ export async function confirmarAsistencia(
   telefono,
   asistencia,
   num_asistentes,
+  restricciones_alimentarias,
   mensaje,
 ) {
   try {
@@ -17,6 +18,7 @@ export async function confirmarAsistencia(
       telefono,
       asistencia,
       num_asistentes,
+      restricciones_alimentarias,
       mensaje,
     };
     const respuesta = await peticionServicio("POST", url, body);

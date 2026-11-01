@@ -7,5 +7,6 @@ create table boda.confirmacion_asistencia
     asistencia varchar(1) not null default 'S',
     mensaje varchar(500) null,
     num_asistentes integer,
+    restricciones_alimentarias varchar(500) null,
     fecha_confirmacion timestamp not null default current_timestamp
 );

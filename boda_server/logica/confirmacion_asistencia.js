@@ -7,11 +7,12 @@ export async function insertar_confirmacion_asistencia(
   telefono,
   asistencia,
   num_asistentes,
+  restricciones_alimentarias,
   mensaje,
 ) {
   try {
     const sql =
-      "insert into confirmacion_asistencia (nombre_completo, correo_electronico, telefono, asistencia, num_asistentes, mensaje) values (" +
+      "insert into confirmacion_asistencia (nombre_completo, correo_electronico, telefono, asistencia, num_asistentes, mensaje, restricciones_alimentarias) values (" +
       pool.escape(nombre_completo) +
       ", " +
       pool.escape(correo_electronico) +
@@ -23,6 +24,8 @@ export async function insertar_confirmacion_asistencia(
       pool.escape(num_asistentes) +
       ", " +
       pool.escape(mensaje) +
+      ", " +
+      pool.escape(restricciones_alimentarias) +
       ")";
     const results = await wrapperBD.actualiza(sql);
     return results.insertId;

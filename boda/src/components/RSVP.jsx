@@ -24,12 +24,13 @@ const RSVP = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    confirmarAsistencia(
+    await confirmarAsistencia(
       formData.name,
       formData.email,
       formData.phone,
       formData.attendance,
       formData.guests,
+      formData.dietary,
       formData.message,
     );
     setIsSubmitting(true);
