@@ -34,7 +34,9 @@ export default function Retos() {
         await iniciarSesionInvitado(tokenRuta);
         const retosAsignados = await obtenerRetosInvitado();
         setRetos(retosAsignados);
-        setMensaje("Sesión iniciada. Completa los retos y sube una foto para cada uno.");
+        setMensaje(
+          "Sesión iniciada. Completa los retos y sube una foto para cada uno.",
+        );
       } catch (error) {
         setError(error.message);
       } finally {
@@ -111,47 +113,7 @@ export default function Retos() {
         </p>
 
         <div className="retos-grid">
-          <div className="reto-item">
-            <div className="reto-icono">
-              <MdCameraAlt aria-hidden="true" />
-            </div>
-            <div>
-              <span className="reto-etiqueta">BODA RAÚL Y LAURA</span>
-              <h3>Comparte tu recuerdo</h3>
-            </div>
-            <p>
-              Cada mesa recibe sus propios retos. Completa los que aparecen al
-              iniciar sesión con el token entregado en vuestra mesa.
-            </p>
-            <div className="reto-premio">
-              <MdCardGiftcard aria-hidden="true" />
-              <span>Las mejores fotos formarán parte de nuestro álbum.</span>
-            </div>
-          </div>
-
           <div>
-            <form className="retos-form" onSubmit={iniciarSesion}>
-              <div className="retos-form-cabecera">
-                <span className="retos-paso">PASO 1</span>
-                <h3>Accede con el token de tu mesa</h3>
-              </div>
-              <div className="retos-campo">
-                <label htmlFor="token-mesa">Token de mesa</label>
-                <EntradaTexto
-                  id="token-mesa"
-                  valor={token}
-                  setTexto={setToken}
-                  placeholder="Introduce el token"
-                  width="100%"
-                  height="48px"
-                />
-              </div>
-              <button className="retos-enviar" type="submit" disabled={cargando}>
-                Iniciar sesión
-                <MdSend aria-hidden="true" />
-              </button>
-            </form>
-
             {retos.length > 0 && (
               <section className="retos-form retos-form-subida">
                 <div className="retos-form-cabecera">
@@ -170,7 +132,9 @@ export default function Retos() {
                           alt={`Foto enviada para ${reto.nombre_reto}`}
                         />
                       )}
-                      <form onSubmit={(event) => enviarFoto(event, reto.id_reto)}>
+                      <form
+                        onSubmit={(event) => enviarFoto(event, reto.id_reto)}
+                      >
                         <label
                           className="reto-fichero"
                           htmlFor={`foto-reto-${reto.id_reto}`}
@@ -210,8 +174,16 @@ export default function Retos() {
               </section>
             )}
 
-            {mensaje && <p className="retos-estado" role="status">{mensaje}</p>}
-            {error && <p className="retos-error" role="alert">{error}</p>}
+            {mensaje && (
+              <p className="retos-estado" role="status">
+                {mensaje}
+              </p>
+            )}
+            {error && (
+              <p className="retos-error" role="alert">
+                {error}
+              </p>
+            )}
           </div>
         </div>
       </div>
