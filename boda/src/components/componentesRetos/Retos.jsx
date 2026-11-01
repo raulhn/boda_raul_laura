@@ -7,6 +7,7 @@ import {
   obtenerRetosInvitado,
   subirFotoReto,
 } from "../../servicios/serviceInvitados.js";
+import { URL_API } from "../../constantes.js";
 import "./Retos.css";
 
 export default function Retos() {
@@ -165,7 +166,7 @@ export default function Retos() {
                       {reto.ruta_foto && (
                         <img
                           className="reto-foto"
-                          src={`/static/photos/${reto.ruta_foto}`}
+                          src={`${URL_API}/static/photos/${encodeURIComponent(reto.ruta_foto)}`}
                           alt={`Foto enviada para ${reto.nombre_reto}`}
                         />
                       )}
