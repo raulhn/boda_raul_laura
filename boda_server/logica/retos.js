@@ -94,8 +94,7 @@ export async function obtenerRetos() {
     let sql = "select * from retos";
     let params = [];
 
-    if (idMesa) {
-      sql = `
+    sql = `
         select r.*, fr.ruta_foto
         from retos r
         join mesa_retos mr on r.id_reto = mr.id_reto
@@ -103,7 +102,6 @@ export async function obtenerRetos() {
           on fr.id_mesa = mr.id_mesa and fr.id_reto = mr.id_reto
         where  mr.estado = 'activo'
       `;
-    }
 
     const results = await wrapperBD.consulta(sql, params);
     return results;
