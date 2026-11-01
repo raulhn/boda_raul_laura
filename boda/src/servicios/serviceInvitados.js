@@ -9,7 +9,10 @@ export async function iniciarSesionInvitado(token) {
 }
 
 export async function obtenerRetosInvitado() {
-  const respuesta = await peticionServicio("GET", `${URL_API}/obtenerRetos`);
+  const respuesta = await peticionServicio(
+    "GET",
+    `${URL_API}/obtenerRetosMesa`,
+  );
   return respuesta.retos;
 }
 
