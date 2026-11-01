@@ -15,9 +15,9 @@ const Hero = () => {
         <div className={`hero-text ${isVisible ? "animate-fade-in-up" : ""}`}>
           <p className="hero-date">23 de Octubre, 2027</p>
           <h1 className="hero-names">
-            <span className="name">Raúl</span>
-            <span className="ampersand">&</span>
             <span className="name">Laura</span>
+            <span className="ampersand">&</span>
+            <span className="name">Raúl</span>
           </h1>
           <p className="hero-subtitle">¡Nos casamos!</p>
           <p className="hero-description">
@@ -57,4 +57,3 @@ const Hero = () => {
 };
 
 export default Hero;
-
